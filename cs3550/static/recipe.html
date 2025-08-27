@@ -1,4 +1,5 @@
 <!doctype html>
+<link rel="stylesheet" href="/static/main.css">
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -12,8 +13,8 @@
       <a class="brand" href="/">Dishbook</a>
       <nav class="site-nav" aria-label="Primary">
         <ul class="site-nav__links">
-          <li><a href="/" aria-current="page">Home</a></li>
-          <li><a href="/cookbook">My Cookbook</a></li>
+          <li><a href="/" aria-current="/static/index.html">Home</a></li>
+          <li><a href="/static/profile.html">My Cookbook</a></li>
         </ul>
         <form class="site-nav__search" role="search" action="/search" method="get">
           <input id="q" name="q" type="search" placeholder="" />
@@ -23,21 +24,19 @@
     </div>
   </header>
 
-
+  <!-- how to add a simple text -->
+  <p>Ben Braiser <a href="/static/profile.html">View Profile</a></p>
 
   <!-- Main Content: Recipe Page -->
   <main id="main" class="main" tabindex="-1">
     <article class="recipe" itemscope itemtype="https://schema.org/Recipe">
 
       <header class="recipe__header">
-        <h1 class="recipe__title" itemprop="name">Weeknight Lemon Chicken Pasta</h1>
-        <span class="recipe__byline">By <a href="/profile/jane-doe" rel="author" itemprop="author">Jane Doe</a></span>
-        <span>Based on <a href="/recipe/3">Gordon Ramsey's
-            <a href="/recipe/29">Beef Wellington</a></span>
-        <ul class="recipe__tags" aria-label="Tags">
-          <li><a href="/tags/quick">quick</a></li>
-          <li><a href="/tags/chicken">chicken</a></li>
-          <li><a href="/tags/pasta">pasta</a></li>
+        <h1 class="recipe__title" itemprop="name">Chicken Adobo</h1>
+        <span class="recipe__byline">By <a href="/static/profile.html" rel="author" itemprop="author">Ben Braiser</a></span>
+        <ul class="recipe__tags" aria-label="Tags">Tags:
+          <li><a href="/tags/quick">#asian</a></li>
+          <li><a href="/tags/chicken">#comfort</a></li>
         </ul>
       </header>
 

@@ -1,23 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dishbook — Log In</title>
-</head>
-<body>
+ <header class="site-header" role="banner">
+    <div class="site-header__inner">
+      <a class="brand" href="/static/index.html">Dishbook</a>
 
-  <header>
-    <h1><a href="/">Dishbook</a></h1>
-    <nav aria-label="Primary">
-      <ul>
-        <li><a href="/cookbook/">Recipes</a></li>
-        <li><a href="/">About</a></li>
-        <li aria-current="page">Log in</li>
-      </ul>
-    </nav>
+      <div style="height: 2em;"></div>
+      <a href="/static/profile.html" class="view-profile-link">Sign in</a>
+
+      <nav class="site-nav" aria-label="Primary">
+        <ul class="site-nav__links">
+          <li><a href="/static/index.html" aria-current="page">Home</a></li>
+        </ul>
+        <form class="site-nav__search" role="search" action="/search" method="get">
+          <input id="q" name="q" type="search" placeholder="" />
+          <button type="submit">Search</button>
+        </form>
+      </nav>
+    </div>
   </header>
-
   <main id="main" tabindex="-1">
     <h2>Log in</h2>
 
