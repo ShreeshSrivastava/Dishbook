@@ -1,16 +1,16 @@
 <!Doctype html>
  <header class="site-header" role="banner">
     <div class="site-header__inner">
-      <a class="brand" href="http://127.0.0.1:8000/static/index.html">Dishbook</a>
+      <a class="brand" href="/static/index.html">Dishbook</a>
 
       <div style="height: 2em;"></div>
-      <span>Ben Braiser</span>
-      <a href="http://127.0.0.1:8000/static/profile.html" class="view-profile-link">View profile</a>
+      <span>Prof. Panchekha</span>
+      <a href="/static/profile.html" class="view-profile-link">View profile</a>
 
       <nav class="site-nav" aria-label="Primary">
         <ul class="site-nav__links">
-          <li style="color: red;"><a href="http://127.0.0.1:8000/static/index.html" aria-current="page">Home</a></li>
-          <li><a href="static/cookbook.html">My Cookbook</a></li>
+          <li><a href="/static/index.html" aria-current="page">Home</a></li>
+          <li><a href="/static/cookbook.html">My Cookbook</a></li>
         </ul>
         <form class="site-nav__search" role="search" action="/search" method="get">
           <input id="q" name="q" type="search" placeholder="" />
@@ -19,3 +19,141 @@
       </nav>
     </div>
   </header>
+
+  <!-- profile content-->
+
+  <main id="main">
+    <header class="profile-header">
+        <h1>Ben Braiser</h1>
+        <p>Joined 1 week, 1 day ago Author of 7 recipes</p>
+        <figure>
+            <img src="/static/ben-braiser.png"
+            alt="Profile picture of Ben Braiser"
+            width="150" height="150"
+            loading="lazy" />
+        </figure>
+    </header>
+
+    <section class="about">
+        <h2>About Me</h2>
+        <p>
+            I cook the kind of food that feels like home, and wander the world from my stove.
+            My recipes are weeknight-friendly, written with clear steps, sensible substitutions,
+            and the occasional gram weight when it helps. I love cast iron, pantry staples, and 
+            dishes that scale for friends and neighbors. If you try something, tell me what you changed--variation is the point.
+        </p>
+    </section>
+
+    <section class="recipes">
+        <h2>My Recipes</h2>
+        <ul class="recipe-list">
+            <li>
+          <article class="recipe-card">
+            <a class="card__link" href="/recipe/carne-asada">
+              <figure class="card__media">
+                <img src="/static/carne-asada.png" alt="Bowl of carne asada with cilantro and lime" width="640" height="480" loading="lazy" />
+              </figure>
+              <div class="card__body">
+                <h3 class="card__title">Carne Asada</h3>
+                <ul class="tags">
+                  <li><a href="/s?q=tag%3Aquick">#street-food</a></li>
+                  <li><a href="/s?q=tag%3Achicken">#spicy</a></li>
+                  <li><a href="/s?q=tag%3Apasta">#latino</a></li>
+                </ul>
+              </div>
+            </a>
+          </article>
+        </li>
+
+         <li>
+          <article class="recipe-card">
+            <a class="card__link" href="/recipe/chicken-adobo">
+              <figure class="card__media">
+                <img src="/static/chicken-adobo.png" alt="Chicken Adobo" width="640" height="480" loading="lazy" />
+              </figure>
+              <div class="card__body">
+                <h3 class="card__title">Chicken Adobo</h3>
+                <ul class="tags">
+                  <li><a href="/s?q=tag%3Acomfort">#comfort</a></li>
+                  <li><a href="/s?q=tag%3Aholiday">#asian</a></li>
+                </ul>
+              </div>
+            </a>
+          </article>
+        </li>
+
+          <li>
+          <article class="recipe-card">
+            <a class="card__link" href="/recipe/funeral-potatoes.html">
+              <figure class="card__media">
+                <img src="/static/funeral-potatoes.png" alt="Funeral Potatoes" width="640" height="480" loading="lazy" />
+              </figure>
+              <div class="card__body">
+                <h3 class="card__title">Funeral Potatoes</h3>
+                <ul class="tags">
+                  <li><a href="/s?q=tag%3Aone-pot">#comfort</a></li>
+                  <li><a href="/s?q=tag%3Afreezer">#holiday</a></li>
+                  <li><a href="/s?q=tag%3Acrowd">#utah</a></li>
+                </ul>
+              </div>
+            </a>
+          </article>
+        </li>
+
+        <li>
+          <article class="recipe-card">
+            <a class="card__link" href="/recipe/green-jello-with-pineapple">
+              <figure class="card__media">
+                <img src="/static/green-jello-with-pineapple.png" alt="Green Jello with Pineapple" width="640" height="480" loading="lazy" />
+              </figure>
+              <div class="card__body">
+                <h3 class="card__title">Green Jello with Pineapple</h3>
+                <ul class="tags">
+                  <li><a href="/s?q=tag%3Aone-pot">#comfort</a></li>
+                  <li><a href="/s?q=tag%3Afreezer">#holiday</a></li>
+                  <li><a href="/s?q=tag%3Acrowd">#utah</a></li>
+                </ul>
+              </div>
+            </a>
+          </article>
+        </li>
+
+        <li>
+          <article class="recipe-card">
+            <a class="card__link" href="/recipe/fry-sauce">
+              <figure class="card__media">
+                <img src="/static/fry-sauce.png" alt="Fry Sauce" width="640" height="480" loading="lazy" />
+              </figure>
+              <div class="card__body">
+                <h3 class="card__title">Fry Sauce</h3>
+                <ul class="tags">
+                  <li><a href="/s?q=tag%3Aone-pot">#comfort</a></li>
+                  <li><a href="/s?q=tag%3Afreezer">#holiday</a></li>
+                  <li><a href="/s?q=tag%3Acrowd">#utah</a></li>
+                </ul>
+              </div>
+            </a>
+          </article>
+        </li>
+
+        <li>
+          <article class="recipe-card">
+            <a class="card__link" href="/recipe/dutch-oven-peach-cobbler">
+              <figure class="card__media">
+                <img src="/static/dutch-oven-peach-cobbler.png" alt="Dutch Oven Peach Cobbler" width="640" height="480" loading="lazy" />
+              </figure>
+              <div class="card__body">
+                <h3 class="card__title">Dutch Oven Peach Cobbler</h3>
+                <ul class="tags">
+                  <li><a href="/s?q=tag%3Aone-pot">#comfort</a></li>
+                  <li><a href="/s?q=tag%3Afreezer">#holiday</a></li>
+                  <li><a href="/s?q=tag%3Acrowd">#utah</a></li>
+                </ul>
+              </div>
+            </a>
+          </article>
+        </li>
+
+    </section>
+  </main>
+  
