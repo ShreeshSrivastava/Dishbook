@@ -1,0 +1,21 @@
+<!Doctype html>
+ <header class="site-header" role="banner">
+    <div class="site-header__inner">
+      <a class="brand" href="http://127.0.0.1:8000/static/index.html">Dishbook</a>
+
+      <div style="height: 2em;"></div>
+      <span>Ben Braiser</span>
+      <a href="http://127.0.0.1:8000/static/profile.html" class="view-profile-link">View profile</a>
+
+      <nav class="site-nav" aria-label="Primary">
+        <ul class="site-nav__links">
+          <li style="color: red;"><a href="http://127.0.0.1:8000/static/index.html" aria-current="page">Home</a></li>
+          <li><a href="static/cookbook.html">My Cookbook</a></li>
+        </ul>
+        <form class="site-nav__search" role="search" action="/search" method="get">
+          <input id="q" name="q" type="search" placeholder="" />
+          <button type="submit">Search</button>
+        </form>
+      </nav>
+    </div>
+  </header>
