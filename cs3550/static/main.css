@@ -17,7 +17,10 @@ h2, h3, h4, h5, h6 {
   font-size: 1.25em;
 }
 
-.recipe__meta strong,
+.recipe__meta dt{
+    font-weight: bold;
+    margin-top: 0.5em;
+}
 .recipe__meta .label {
   font-weight: 600;
 }
@@ -30,4 +33,11 @@ h2, h3, h4, h5, h6 {
   list-style: none;
   padding: 0;
   margin: 0;
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-left: 0;
+    margin-left: 0;
 }
