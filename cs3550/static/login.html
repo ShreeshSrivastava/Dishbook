@@ -10,8 +10,7 @@
     <div class="site-header__inner">
       <h2 class="brand" href="/static/index.html">Dishbook</h2>
 
-      <div style="height: 2em;"></div>
-      <a href="/static/login.html" class="view-profile-link">Sign in</a>
+     <div class="nav-line"><a href="/static/login.html" class="view-profile-link">Sign in</a></div>
 
       <nav class="site-nav" aria-label="Primary">
         <ul class="site-nav__links">
@@ -25,6 +24,7 @@
     </div>
   </header>
   <main id="main" tabindex="-1">
+    <div class="login-box">
     <h2>Sign in to Dishbook</h2>
 
     <form action="/login" method="post" aria-describedby="login-help">
@@ -35,6 +35,8 @@
         <label for="password">Password</label>
         <input id="password" name="password" type="password" autocomplete="current-password" required />
         <button type="submit">Sign in</button>
+      </form>
+      </div>
       </div>
   </main>
 

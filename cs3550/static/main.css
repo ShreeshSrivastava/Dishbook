@@ -1,6 +1,8 @@
 
 body {
   font-family: 'Nunito', Arial, sans-serif;
+  background-color: #F7F1E8;
+  color: #2E261C;
   font-size: 18px;
   line-height: 1.25;
 }
@@ -8,11 +10,21 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Playwrite US Trad', cursive;
+  color: #A8570C;
 }
 
+a {
+    color: #8B5E34;
+    text-decoration: none;
+}
+a:hover{
+    color: #A8570C;
+    text-decoration: underline;
+}
 h1 {
   font-size: 1.8em;
 }
+
 h2, h3, h4, h5, h6 {
   font-size: 1.25em;
 }
@@ -34,10 +46,61 @@ h2, h3, h4, h5, h6 {
   padding: 0;
   margin: 0;
 }
+.recipe__tags .hash {
+    color: #8B5E34;
+    font-weight: bold;
+}
 
 ul {
     list-style-type: none;
     padding-left: 0;
     margin-left: 0;
     margin-left: 0;
+}
+.site-header p {
+  font-weight: 500;
+  border-bottom: 2px solid #8B5E3C; 
+  padding-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.view-profile-link {
+    font-weight: 500;
+    color: #8B5E34;
+    text-decoration: none;
+}
+
+.view-profile-link:hover {
+    color: #A8570C;
+    text-decoration: underline;
+}
+
+.nav-line {
+    border-bottom: 2px solid #2E261C;
+    padding-bottom: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.login-box{
+    border: 1px solid #A8570C;
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 400px;
+    background-color: #fefaf5;
+}
+.index-box {
+    border: 1px solid #A8570C;
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fefaf5;
+}
+.recipe-box{
+    border: 1px solid #A8570C;
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fefaf5;
 }
