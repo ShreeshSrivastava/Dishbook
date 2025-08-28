@@ -8,10 +8,10 @@
 </head>
  <header class="site-header" role="banner">
     <div class="site-header__inner">
-      <a class="brand" href="/static/index.html">Dishbook</a>
+      <h2 class="brand" href="/static/index.html">Dishbook</h2>
 
       <div style="height: 2em;"></div>
-      <a href="/static/profile.html" class="view-profile-link">Sign in</a>
+      <a href="/static/login.html" class="view-profile-link">Sign in</a>
 
       <nav class="site-nav" aria-label="Primary">
         <ul class="site-nav__links">
@@ -30,17 +30,11 @@
     <form action="/login" method="post" aria-describedby="login-help">
       <!-- Add your CSRF token field here if needed -->
       <div>
-        <label for="email">Email</label>
+        <label for="email">Username</label>
         <input id="email" name="email" type="email" autocomplete="username" required />
-      </div>
-
-      <div>
         <label for="password">Password</label>
         <input id="password" name="password" type="password" autocomplete="current-password" required />
-      </div>
-
-      <div>
-        <button type="submit">Log in</button>
+        <button type="submit">Sign in</button>
       </div>
   </main>
 

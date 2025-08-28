@@ -14,13 +14,13 @@
   <!-- Site Header / Nav -->
   <header class="site-header" role="banner">
     <div class="site-header__inner">
-      <a class="brand" href="/">Dishbook</a>
+      <h2 class="brand" href="/static/index.html">Dishbook</h2>
               <p> Ben Braiser <a href="/static/profile.html">View profile</a></p>
 
       <nav class="site-nav" aria-label="Primary">
         <ul class="site-nav__links">
-          <li><a href="/" aria-current="page">Home</a></li>
-          <li><a href="/cookbook">My Cookbook</a></li>
+          <li><a href="/static/index.html" aria-current="page">Home</a></li>
+          <li><a href="/static/profile.html">My Cookbook</a></li>
         </ul>
         <form class="site-nav__search" role="search" action="/search" method="get">
           <input id="q" name="q" type="search" placeholder="" />
@@ -38,29 +38,61 @@
         <form class="search-form" role="search" action="/search" method="get">
           <div class="search-form__row">
             <input id="q" name="q" type="search" required placeholder="" />
-            <button type="submit" class="btn btn-primary">Search</button>
           </div>
 
-          
+        </form>
     </section>
 
     <!-- Results summary + count -->
-    <section class="results" aria-labelledby="results-heading">
-
-      <!-- Cards grid (3-up on desktop) -->
-      <ul class="card-grid" aria-label="Recipe results">
-        <li>
+     <section class="recipes">
+        <ul class="recipe-list">
+            <li>
           <article class="recipe-card">
-            <a class="card__link" href="/recipe/lemon-chicken-pasta">
+            <a class="card__link" href="/static/recipe.html">
               <figure class="card__media">
-                <img src="/assets/recipes/lemon-chicken-pasta.jpg" alt="Bowl of lemon chicken pasta with parsley" width="640" height="480" loading="lazy" />
+                <img src="/static/carne-asada.png" alt="Bowl of carne asada with cilantro and lime" width="640" height="640" loading="lazy" />
               </figure>
               <div class="card__body">
-                <h3 class="card__title">Weeknight Lemon Chicken Pasta</h3>
+                <h3 class="card__title">Carne Asada</h3>
                 <ul class="tags">
-                  <li><a href="/s?q=tag%3Aquick">quick</a></li>
-                  <li><a href="/s?q=tag%3Achicken">chicken</a></li>
-                  <li><a href="/s?q=tag%3Apasta">pasta</a></li>
+                  <li><a href="/s?q=tag%3Aquick">#street-food</a></li>
+                  <li><a href="/s?q=tag%3Achicken">#spicy</a></li>
+                  <li><a href="/s?q=tag%3Apasta">#latino</a></li>
+                </ul>
+              </div>
+            </a>
+          </article>
+        </li>
+
+         <li>
+          <article class="recipe-card">
+            <a class="card__link" href="/static/recipe.html">
+              <figure class="card__media">
+                <img src="/static/chicken-adobo.png" alt="Chicken Adobo" width="640" height="640" loading="lazy" />
+              </figure>
+              <div class="card__body">
+                <h3 class="card__title">Chicken Adobo</h3>
+                <ul class="tags">
+                  <li><a href="/s?q=tag%3Acomfort">#comfort</a></li>
+                  <li><a href="/s?q=tag%3Aholiday">#asian</a></li>
+                </ul>
+              </div>
+            </a>
+          </article>
+        </li>
+
+          <li>
+          <article class="recipe-card">
+            <a class="card__link" href="/static/recipe.html">
+              <figure class="card__media">
+                <img src="/static/funeral-potatoes.png" alt="Funeral Potatoes" width="640" height="640" loading="lazy" />
+              </figure>
+              <div class="card__body">
+                <h3 class="card__title">Funeral Potatoes</h3>
+                <ul class="tags">
+                  <li><a href="/s?q=tag%3Aone-pot">#comfort</a></li>
+                  <li><a href="/s?q=tag%3Afreezer">#holiday</a></li>
+                  <li><a href="/s?q=tag%3Acrowd">#utah</a></li>
                 </ul>
               </div>
             </a>
@@ -69,16 +101,16 @@
 
         <li>
           <article class="recipe-card">
-            <a class="card__link" href="/recipe/chicken-broccoli-casserole">
+            <a class="card__link" href="/static/recipe.html">
               <figure class="card__media">
-                <img src="/assets/recipes/chicken-broccoli-casserole.jpg" alt="Cheesy chicken broccoli casserole in a baking dish" width="640" height="480" loading="lazy" />
+                <img src="/static/green-jello-with-pineapple.png" alt="Green Jello with Pineapple" width="640" height="640" loading="lazy" />
               </figure>
               <div class="card__body">
-                <h3 class="card__title">Chicken Broccoli Casserole</h3>
+                <h3 class="card__title">Green Jello with Pineapple</h3>
                 <ul class="tags">
-                  <li><a href="/s?q=tag%3Acomfort">comfort</a></li>
-                  <li><a href="/s?q=tag%3Acrowd">crowd</a></li>
-                  <li><a href="/s?q=tag%3Afreezer">freezer</a></li>
+                  <li><a href="/s?q=tag%3Aone-pot">#comfort</a></li>
+                  <li><a href="/s?q=tag%3Afreezer">#holiday</a></li>
+                  <li><a href="/s?q=tag%3Acrowd">#utah</a></li>
                 </ul>
               </div>
             </a>
@@ -87,30 +119,57 @@
 
         <li>
           <article class="recipe-card">
-            <a class="card__link" href="/recipe/teriyaki-chicken-bowl">
+            <a class="card__link" href="/static/recipe.html">
               <figure class="card__media">
-                <img src="/assets/recipes/teriyaki-chicken-bowl.jpg" alt="Teriyaki chicken bowl with rice and vegetables" width="640" height="480" loading="lazy" />
+                <img src="/static/fry-sauce.png" alt="Fry Sauce" width="640" height="640" loading="lazy" />
               </figure>
               <div class="card__body">
-                <h3 class="card__title">Teriyaki Chicken Bowl</h3>
+                <h3 class="card__title">Fry Sauce</h3>
                 <ul class="tags">
-                  <li><a href="/s?q=tag%3Aquick">quick</a></li>
-                  <li><a href="/s?q=tag%3Atakeout-at-home">takeout-at-home</a></li>
-                  <li><a href="/s?q=tag%3Alunch">lunch</a></li>
+                  <li><a href="/s?q=tag%3Aone-pot">#comfort</a></li>
+                  <li><a href="/s?q=tag%3Afreezer">#holiday</a></li>
+                  <li><a href="/s?q=tag%3Acrowd">#utah</a></li>
                 </ul>
               </div>
             </a>
           </article>
         </li>
-      </ul>
 
-      <!-- Empty state example (keep for reference; remove when templating) -->
-      <!--
-      <div class="empty" role="status">
-        <p>No recipes found for “quinoa brownies”. Try fewer filters or a different search.</p>
-        <p><a href="/cookbook">Browse all recipes</a></p>
-      </div>
-      -->
+        <li>
+          <article class="recipe-card">
+            <a class="card__link" href="/static/recipe.html">
+              <figure class="card__media">
+                <img src="/static/dutch-oven-peach-cobbler.png" alt="Dutch Oven Peach Cobbler" width="640" height="640" loading="lazy" />
+              </figure>
+              <div class="card__body">
+                <h3 class="card__title">Dutch Oven Peach Cobbler</h3>
+                <ul class="tags">
+                  <li><a href="/s?q=tag%3Aone-pot">#comfort</a></li>
+                  <li><a href="/s?q=tag%3Afreezer">#holiday</a></li>
+                  <li><a href="/s?q=tag%3Acrowd">#utah</a></li>
+                </ul>
+              </div>
+            </a>
+          </article>
+        </li>
+
+           <li>
+          <article class="recipe-card">
+            <a class="card__link" href="/static/recipe.html">
+              <figure class="card__media">
+                <img src="/static/lion-house-rolls.png" alt="Lion House Rolls" width="640" height="640" loading="lazy" />
+              </figure>
+              <div class="card__body">
+                <h3 class="card__title">Lion House Rolls</h3>
+                <ul class="tags">
+                  <li><a href="/s?q=tag%3Aone-pot">#comfort</a></li>
+                  <li><a href="/s?q=tag%3Afreezer">#holiday</a></li>
+                  <li><a href="/s?q=tag%3Acrowd">#utah</a></li>
+                </ul>
+              </div>
+            </a>
+          </article>
+        </li>
     </section>
   </main>
 </body>
