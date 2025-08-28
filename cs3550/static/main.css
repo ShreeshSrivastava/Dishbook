@@ -1,0 +1,33 @@
+
+body {
+  font-family: 'Nunito', Arial, sans-serif;
+  font-size: 18px;
+  line-height: 1.25;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playwrite US Trad', cursive;
+}
+
+h1 {
+  font-size: 1.8em;
+}
+h2, h3, h4, h5, h6 {
+  font-size: 1.25em;
+}
+
+.recipe__meta strong,
+.recipe__meta .label {
+  font-weight: 600;
+}
+
+.login-form, .login-form input, .login-form label, .login-form button {
+  font-size: 1.25em; /* 25% larger than 18px */
+}
+
+.recipe__tags {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}

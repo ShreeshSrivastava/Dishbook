@@ -1,11 +1,14 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital@0;1&family=Playwrite+US+Trad:wght@100..400&display=swap" rel="stylesheet">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Dishbook — Home</title>
   <!-- Skeleton only. Wire your template + CSS later. -->
-  <link rel="stylesheet" href="/assets/styles.css" />
+  <link rel="stylesheet" href="/static/main.css" />
 </head>
 <body>
   <!-- Site Header / Nav -->
@@ -14,8 +17,8 @@
       <a class="brand" href="/">Dishbook</a>
       <nav class="site-nav" aria-label="Primary">
         <ul class="site-nav__links">
-          <li><a href="/" aria-current="page">Home</a></li>
-          <li><a href="/cookbook">My Cookbook</a></li>
+          <li><a href="/static/index.html" aria-current="page">Home</a></li>
+          <li><a href="/static/profile.html">My Cookbook</a></li>
         </ul>
         <form class="site-nav__search" role="search" action="/search" method="get">
           <input id="q" name="q" type="search" placeholder="" />
@@ -39,8 +42,8 @@
         with photos, tags, and clear steps. Build a cookbook that
         grows with you, one small improvement at a time.</p>
         <p class="actions">
-          <a class="btn btn-primary" href="/signup">Sign in</a>
-          <a class="btn" href="/cookbook">Browse recipes</a>
+          <a class="btn btn-primary" href="/static/login.html">Sign in</a>
+          <a class="btn" href="/static/search.html">Browse recipes</a>
         </p>
       </div>
     </section>
@@ -55,7 +58,7 @@
       <ul class="card-grid" aria-label="Featured recipe cards">
         <li>
           <article class="recipe-card">
-            <a class="card__link" href="/recipe/chicken-adobo">
+            <a class="card__link" href="/static/recipe.html">
               <figure class="card__media">
                 <img src="/static/chicken-adobo.png" alt="Chicken Adobo" width="640" height="480" loading="lazy" />
               </figure>
@@ -72,7 +75,7 @@
 
         <li>
           <article class="recipe-card">
-            <a class="card__link" href="/recipe/carne-asada">
+            <a class="card__link" href="/static/recipe.html">
               <figure class="card__media">
                 <img src="/static/carne-asada.png" alt="Bowl of carne asada with cilantro and lime" width="640" height="480" loading="lazy" />
               </figure>
@@ -90,12 +93,30 @@
 
         <li>
           <article class="recipe-card">
-            <a class="card__link" href="/recipe/chili">
+            <a class="card__link" href="/static/recipe.html">
               <figure class="card__media">
                 <img src="/static/funeral-potatoes.png" alt="Funeral Potatoes" width="640" height="480" loading="lazy" />
               </figure>
               <div class="card__body">
                 <h3 class="card__title">Funeral Potatoes</h3>
+                <ul class="tags">
+                  <li><a href="/s?q=tag%3Aone-pot">#comfort</a></li>
+                  <li><a href="/s?q=tag%3Afreezer">#holiday</a></li>
+                  <li><a href="/s?q=tag%3Acrowd">#utah</a></li>
+                </ul>
+              </div>
+            </a>
+          </article>
+        </li>
+
+         <li>
+          <article class="recipe-card">
+            <a class="card__link" href="/static/recipe.html">
+              <figure class="card__media">
+                <img src="/static/lion-house-rolls.png" alt="Lion House Rolls" width="640" height="480" loading="lazy" />
+              </figure>
+              <div class="card__body">
+                <h3 class="card__title">Lion House Rolls</h3>
                 <ul class="tags">
                   <li><a href="/s?q=tag%3Aone-pot">#comfort</a></li>
                   <li><a href="/s?q=tag%3Afreezer">#holiday</a></li>

@@ -1,4 +1,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital@0;1&family=Playwrite+US+Trad:wght@100..400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/main.css"/>
+</head>
  <header class="site-header" role="banner">
     <div class="site-header__inner">
       <a class="brand" href="/static/index.html">Dishbook</a>
@@ -18,12 +25,10 @@
     </div>
   </header>
   <main id="main" tabindex="-1">
-    <h2>Log in</h2>
+    <h2>Sign in to Dishbook</h2>
 
     <form action="/login" method="post" aria-describedby="login-help">
       <!-- Add your CSRF token field here if needed -->
-      <p id="login-help">Use your Dishbook account email and password.</p>
-
       <div>
         <label for="email">Email</label>
         <input id="email" name="email" type="email" autocomplete="username" required />
@@ -35,25 +40,9 @@
       </div>
 
       <div>
-        <input id="remember" name="remember" type="checkbox" value="1" />
-        <label for="remember">Keep me signed in on this device</label>
-      </div>
-
-      <div>
         <button type="submit">Log in</button>
       </div>
-
-      <p><a href="/forgot">Forgot your password?</a></p>
-    </form>
-
-    <section aria-labelledby="create-account">
-      <h3 id="create-account">New to Dishbook?</h3>
-      <p><a href="/register">Create an account</a> to save recipes, track variations, and follow cooks you like.</p>
-    </section>
   </main>
 
-  <footer>
-    <small>© 2025 Dishbook · <a href="/terms">Terms</a> · <a href="/privacy">Privacy</a></small>
-  </footer>
 </body>
 </html>
