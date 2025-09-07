@@ -144,3 +144,5 @@ ul {
     background-color: #4B2E2B;
     color:#FFF;
 }
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
