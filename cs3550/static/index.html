@@ -11,18 +11,24 @@
   <link rel="stylesheet" href="/static/main.css" />
 </head>
 <body>
-  <!-- Site Header / Nav -->
-  <header class="site-header" role="banner">
+  <!-- Site Header -->
+ <header class="site-header" role="banner">
     <div class="site-header__inner">
-      <h2 class="brand" href="/static/index.html">Dishbook</h2>
-              <p> Ben Braiser <a href="/static/profile.html">View profile</a></p>
+      <div class="header-top">
+        <h2 class="brand"><a href="/static/index.html">Dishbook</a></h2>
+        <a class="view-profile-link" href="/static/profile.html">Ben Braiser<span class="sep"></span> View Profile</a>
+      </div>
+
+      <hr class="header-sep">
+
       <nav class="site-nav" aria-label="Primary">
         <ul class="site-nav__links">
-          <li><a href="/static/index.html" aria-current="page">Home</a></li>
+          <li><a href="/static/index.html">Home</a></li>
           <li><a href="/static/profile.html">My Cookbook</a></li>
         </ul>
         <form class="site-nav__search" role="search" action="/search" method="get">
-          <input id="q" name="q" type="search" placeholder="" />
+          <label for="q" class="sr-only"> Search Recipes</label>
+          <input id="q" name="q" type="search" placeholder="" aria-label="Search recipes"/>
           <button type="submit">Search</button>
         </form>
       </nav>

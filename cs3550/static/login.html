@@ -1,45 +1,58 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
-  <meta charset = "utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
 <head>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:ital@0;1&family=Playwrite+US+Trad:wght@100..400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/static/main.css"/>
-</head>
- <header class="site-header" role="banner">
-    <div class="site-header__inner">
-      <h2 class="brand" href="/static/index.html">Dishbook</h2>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-     <div class="nav-line"><a href="/static/login.html" class="view-profile-link">Sign in</a></div>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital@0;1&family=Playwrite+US+Trad:wght@100..400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/main.css"/>
+  <title>Login – Dishbook</title>
+</head>
+<body>
+  <!-- Site Header -->
+  <header class="site-header" role="banner">
+    <div class="site-header__inner">
+      <div class="header-top">
+        <h2 class="brand"><a href="/static/index.html">Dishbook</a></h2>
+        <a class="view-profile-link" href="/static/profile.html">Ben Braiser View Profile</a>
+      </div>
+
+      <hr class="header-sep">
 
       <nav class="site-nav" aria-label="Primary">
         <ul class="site-nav__links">
-          <li><a href="/static/index.html" aria-current="page">Home</a></li>
+          <li><a href="/static/index.html">Home</a></li>
+          <li><a href="/static/profile.html">My Cookbook</a></li>
         </ul>
         <form class="site-nav__search" role="search" action="/search" method="get">
-          <input id="q" name="q" type="search" placeholder="" />
+          <label for="q" class="sr-only">Search Recipes</label>
+          <input id="q" name="q" type="search" placeholder="" aria-label="Search recipes"/>
           <button type="submit">Search</button>
         </form>
       </nav>
     </div>
   </header>
+
+  <!-- Main Content -->
   <main id="main" tabindex="-1">
     <div class="login-box">
-    <h2>Sign in to Dishbook</h2>
+      <h2>Sign in to Dishbook</h2>
 
-    <form action="/login" method="post" aria-describedby="login-help">
-      <div>
-        <label for="email">Username</label>
-        <input id="email" name="email" type="email" autocomplete="username" required />
-        <label for="password">Password</label>
-        <input id="password" name="password" type="password" autocomplete="current-password" required />
+      <form action="/login" method="post" aria-describedby="login-help">
+        <div>
+          <label for="email">Username:</label>
+          <input id="email" name="email" type="email" autocomplete="username" required /> 
+        </div>
+
+        <div>
+          <label for="password">Password:</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required />
+        </div>
         <button type="submit">Sign in</button>
       </form>
-      </div>
-      </div>
+    </div>
   </main>
-
 </body>
 </html>

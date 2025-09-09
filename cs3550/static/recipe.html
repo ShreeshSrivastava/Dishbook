@@ -1,14 +1,12 @@
 <!doctype html>
-<link rel="stylesheet" href="/static/main.css">
 <html lang="en">
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+ 
 <head>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:ital@0;1&family=Playwrite+US+Trad:wght@100..400&display=swap" rel="stylesheet">
+   <meta charset="utf-8">
   <link rel="stylesheet" href="/static/main.css">
-<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital@0;1&family=Playwrite+US+Trad:wght@100..400&display=swap" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Recipe</title>
 </head>
@@ -16,14 +14,21 @@
   <!-- Site Header -->
  <header class="site-header" role="banner">
     <div class="site-header__inner">
-      <h2 class="brand" href="/static/index.html">Dishbook</h2>
+      <div class="header-top">
+        <h2 class="brand"><a href="/static/index.html">Dishbook</a></h2>
+        <a class="view-profile-link" href="/static/profile.html">Ben Braiser<span class="sep"></span> View Profile</a>
+      </div>
+
+      <hr class="header-sep">
+
       <nav class="site-nav" aria-label="Primary">
         <ul class="site-nav__links">
-          <li><a href="/static/index.html" aria-current="/static/index.html">Home</a></li>
+          <li><a href="/static/index.html">Home</a></li>
           <li><a href="/static/profile.html">My Cookbook</a></li>
         </ul>
         <form class="site-nav__search" role="search" action="/search" method="get">
-          <input id="q" name="q" type="search" placeholder="" />
+          <label for="q" class="sr-only"> Search Recipes</label>
+          <input id="q" name="q" type="search" placeholder="" aria-label="Search recipes"/>
           <button type="submit">Search</button>
         </form>
       </nav>
@@ -35,16 +40,25 @@
   <main id="main" class="main" tabindex="-1">
     <article class="recipe" itemscope itemtype="https://schema.org/Recipe">
 
-      <header class="recipe__header">
-        <h1 class="recipe__title" itemprop="name">Chicken Adobo</h1>
-        <span class="recipe__byline">By <a href="/static/profile.html" rel="author" itemprop="author">Ben Braiser
-        </a></span><br />
-Featured in July 2025
-        <ul class="recipe__tags" aria-label="Tags">Tags:
-          <li><a href="/tags/quick">#asian</a></li>
-          <li><a href="/tags/chicken">#comfort</a></li>
-        </ul>
-      </header>
+    <header class="recipe__header">
+  <h1 class="recipe__title" itemprop="name">Chicken Adobo</h1>
+
+  <div class="recipe__meta-row">
+    <span class="recipe__byline">
+      By <a href="/static/profile.html" rel="author" itemprop="author">Ben Braiser</a>
+    </span>
+
+    <span class="recipe__featured">Featured in July 2025</span>
+
+    <div class="recipe__tags-wrap">
+      <span class="tags-label">Tags:</span>
+      <ul class="recipe__tags" aria-label="Tags">
+        <li><a href="/tags/quick">#asian</a></li>
+        <li><a href="/tags/chicken">#comfort</a></li>
+      </ul>
+    </div>
+  </div>
+</header>
 
       <section class="recipe__intro" aria-labelledby="desc-heading">
         <figure class="recipe__photo" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
