@@ -475,11 +475,12 @@ html { font-size: 18px; }
   }
 
   .profile-header{
-    display: flex;
+    display: inline-flex;
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
   }
+ 
   .profile-text h1{
     margin-bottom: 0.5rem;
     margin-top: 0;
