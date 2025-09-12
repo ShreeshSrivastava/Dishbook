@@ -475,9 +475,8 @@ html { font-size: 18px; }
   }
 
   .profile-header{
-    display: inline-flex;
+    display: flex;
     justify-content: space-between;
-    align-items: center;
     gap: 1rem;
   }
  
