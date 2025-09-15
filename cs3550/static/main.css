@@ -614,7 +614,7 @@ html { font-size: 18px; }
   .recipe-box,
   .profile-box,
   .searchpage-box {
-    width: calc(100% + 1rem);
+    width: calc(100%);
   }
 }
 
