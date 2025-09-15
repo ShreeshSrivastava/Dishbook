@@ -95,6 +95,7 @@ ul {
 
 body {
   margin: 0;
+  padding-inline: 0.5rem;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -279,8 +280,8 @@ html { font-size: 18px; }
 
 @media (min-width:800px){
   .recipe__body{ display:flex; gap:2rem; }
-  .recipe__ingredients{ flex:0 0 var(--sidebar-width); }
-  .recipe__steps{ flex:1 1 auto; }
+  .recipe__ingredients{ flex:1 1 0; }
+  .recipe__steps{ flex:2 1 0; }
 }
 
 .recipe__ingredients h3 {
@@ -381,16 +382,16 @@ html { font-size: 18px; }
 
 .login-box form > div {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: baseline;
-  gap: 0.25rem;
+  gap: 1rem;
   margin-bottom: 1rem;
 }
 
 .login-box form input[type="email"],
 .login-box form input[type="password"] {
   width: 80%;
-  margin-right: auto;
+  margin-left: auto;
   padding: 0.25rem;
   box-sizing: border-box;
 }
@@ -414,9 +415,10 @@ html { font-size: 18px; }
     margin-bottom: 0;
   }
 
-  .login-box form > div + div {
-    margin-top: 1rem;
+  .login-box form > div:first-of-type {
+    margin-bottom: 1rem;
   }
+
   .login-box form input[type="email"],
   .login-box form input[type="password"] {
     width: 100%;
@@ -509,17 +511,15 @@ html { font-size: 18px; }
   margin-bottom: 0.5rem;
 }
 
-/* Base grid: 3 cards per row on wide screens */
 .recipe-list {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;              /* space between cards */
-  list-style: none;       /* remove bullets from <ul> */
+  gap: 1rem;
+  list-style: none;
   margin: 0;
   padding: 0;
 }
 
-/* Important for preventing overflow in grid items */
 .recipe-list > li,
 .recipe-card {
   min-width: 0;
@@ -553,6 +553,16 @@ html { font-size: 18px; }
     grid-template-columns: 1fr;
   }
 
+  .site-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .site-nav__search {
+    margin-left: 0;
+    width: 100%;
+  }
 }
 
 @media (max-width: 500px) {
@@ -566,6 +576,45 @@ html { font-size: 18px; }
     border-radius: 0;
     padding-inline: 0;
     box-shadow: none;
+  }
+
+  .recipe__intro {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .recipe__intro-left,
+  .recipe__intro-right {
+    flex: 1 1 auto;
+  }
+
+  .recipe__body {
+    display: block;
+  }
+
+  .recipe__ingredients {
+    margin-bottom: 2rem;
+  }
+
+  .recipe__steps {
+    margin-bottom: 0;
+  }
+
+  .site-header__inner {
+    padding-inline: 0.5rem;
+  }
+
+  .header-sep {
+    margin-inline: -1rem;
+    width: calc(100% + 2rem);
+  }
+
+  .login-box,
+  .index-box,
+  .recipe-box,
+  .profile-box,
+  .searchpage-box {
+    width: calc(100% + 1rem);
   }
 }
 
