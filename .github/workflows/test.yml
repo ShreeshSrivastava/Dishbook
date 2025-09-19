@@ -15,14 +15,14 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.13'
-      - run: pip install "django>=5"
-      - run: python3 manage.py migrate
       - uses: actions/checkout@v3
         name: "Download grader scripts"
         with:
           repository: utah-cs3550-fa25/autotester
           path: autotester
           ref: main
+      - name: Set up packages and database
+        run: python3 autotester/test.py current setup
       - name: Load homework info
         run: python3 autotester/test.py current gh
       - run: python3 autotester/test.py current 1
