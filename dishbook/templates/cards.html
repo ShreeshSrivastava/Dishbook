@@ -1,0 +1,23 @@
+<ul class="recipe-list">
+  {% for recipe in recipes %}
+    <li>
+      <article class="recipe-card">
+        <a class="card__link" href="/recipe/{{ recipe.id }}">
+          <figure class="card__media">
+            {% if recipe.photo %}
+              <img src="/recipe/{{ recipe.id }}/photo" alt="Photo of {{ recipe.title }}" width="640" height="640" loading="lazy" />
+            {% endif %}
+          </figure>
+          <div class="card__body">
+            <h3 class="card__title">{{ recipe.title }}</h3>
+            <ul class="tags">
+              {% for tag in recipe.tags.all %}
+                <li><a href="/s">#{{ tag.name }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+        </a>
+      </article>
+    </li>
+  {% endfor %}
+</ul>

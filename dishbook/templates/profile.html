@@ -1,58 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Profile Dishbook</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital@0;1&family=Playwrite+US+Trad:wght@100..400&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="/static/main.css" />
-</head>
-<body>
-    <!-- Site Header -->
- <header class="site-header" role="banner">
-    <div class="site-header__inner">
-      <div class="header-top">
-  <h2 class="brand"><a href="/static/index.html">Dishbook</a></h2>
-
-  <div class="user-strip">
-    <span class="profile-name">Ben Braiser</span>
-    <a class="view-profile-link" href="/static/profile.html">View Profile</a>
-  </div>
-</div>
-
-      <hr class="header-sep">
-
-      <nav class="site-nav" aria-label="Primary">
-        <ul class="site-nav__links">
-          <li><a href="/static/index.html">Home</a></li>
-          <li><a href="/static/profile.html">My Cookbook</a></li>
-        </ul>
-        <form class="site-nav__search" role="search" action="/search" method="get">
-          <label for="q" class="sr-only"> Search Recipes</label>
-          <input id="q" name="q" type="search" placeholder="" aria-label="Search recipes"/>
-          <button type="submit">Search</button>
-        </form>
-      </nav>
-    </div>
-  </header>
+{% include "header.html" with title=author.get_full_name %}
 
   <!-- Profile content -->
   <main id="main" class="main" tabindex="-1">
     <div class="profile-box">
       <header class="profile-header">
   <div class="profile-text">
-    <h1>Ben Braiser</h1>
-    <p>Joined 1 week, 1 day ago Author of 7 recipes</p>
+    <h1>{{ author.get_full_name }}</h1>
+    <p>Joined 1 week, 1 day ago Author of {{ recipes|length }} recipes</p>
   </div>
 
   <figure class="profile-image">
     <img
       src="/static/ben-braiser.png"
-      alt="Profile picture of Ben Braiser"
+      alt="Profile picture of {{ author.get_full_name }}"
       loading="lazy" />
   </figure>
 </header>
@@ -68,132 +28,7 @@
       </section>
 
       <section class="recipes">
-        <ul class="recipe-list">
-          <li>
-            <article class="recipe-card">
-              <a class="card__link" href="/static/recipe.html">
-                <figure class="card__media">
-                  <img src="/static/carne-asada.png" alt="Bowl of carne asada with cilantro and lime" width="640" height="640" loading="lazy" />
-                </figure>
-                <div class="card__body">
-                  <h3 class="card__title">Carne Asada</h3>
-                  <ul class="tags">
-                    <li><a href="/s?q=tag%3Astreet-food">#street-food</a></li>
-                    <li><a href="/s?q=tag%3Aspicy">#spicy</a></li>
-                    <li><a href="/s?q=tag%3Alatino">#latino</a></li>
-                  </ul>
-                </div>
-              </a>
-            </article>
-          </li>
-
-          <li>
-            <article class="recipe-card">
-              <a class="card__link" href="/static/recipe.html">
-                <figure class="card__media">
-                  <img src="/static/chicken-adobo.png" alt="Chicken Adobo" width="640" height="640" loading="lazy" />
-                </figure>
-                <div class="card__body">
-                  <h3 class="card__title">Chicken Adobo</h3>
-                  <ul class="tags">
-                    <li><a href="/s?q=tag%3Acomfort">#comfort</a></li>
-                    <li><a href="/s?q=tag%3Aasian">#asian</a></li>
-                  </ul>
-                </div>
-              </a>
-            </article>
-          </li>
-
-          <li>
-            <article class="recipe-card">
-              <a class="card__link" href="/static/recipe.html">
-                <figure class="card__media">
-                  <img src="/static/funeral-potatoes.png" alt="Funeral Potatoes" width="640" height="640" loading="lazy" />
-                </figure>
-                <div class="card__body">
-                  <h3 class="card__title">Funeral Potatoes</h3>
-                  <ul class="tags">
-                    <li><a href="/s?q=tag%3Acomfort">#comfort</a></li>
-                    <li><a href="/s?q=tag%3Aholiday">#holiday</a></li>
-                    <li><a href="/s?q=tag%3Autah">#utah</a></li>
-                  </ul>
-                </div>
-              </a>
-            </article>
-          </li>
-
-          <li>
-            <article class="recipe-card">
-              <a class="card__link" href="/static/recipe.html">
-                <figure class="card__media">
-                  <img src="/static/green-jello-with-pineapple.png" alt="Green Jello with Pineapple" width="640" height="640" loading="lazy" />
-                </figure>
-                <div class="card__body">
-                  <h3 class="card__title">Green Jello with Pineapple</h3>
-                  <ul class="tags">
-                    <li><a href="/s?q=tag%3Acomfort">#comfort</a></li>
-                    <li><a href="/s?q=tag%3Aholiday">#holiday</a></li>
-                    <li><a href="/s?q=tag%3Autah">#utah</a></li>
-                  </ul>
-                </div>
-              </a>
-            </article>
-          </li>
-
-          <li>
-            <article class="recipe-card">
-              <a class="card__link" href="/static/recipe.html">
-                <figure class="card__media">
-                  <img src="/static/fry-sauce.png" alt="Fry Sauce" width="640" height="640" loading="lazy" />
-                </figure>
-                <div class="card__body">
-                  <h3 class="card__title">Fry Sauce</h3>
-                  <ul class="tags">
-                    <li><a href="/s?q=tag%3Acomfort">#comfort</a></li>
-                    <li><a href="/s?q=tag%3Aholiday">#holiday</a></li>
-                    <li><a href="/s?q=tag%3Autah">#utah</a></li>
-                  </ul>
-                </div>
-              </a>
-            </article>
-          </li>
-
-          <li>
-            <article class="recipe-card">
-              <a class="card__link" href="/static/recipe.html">
-                <figure class="card__media">
-                  <img src="/static/dutch-oven-peach-cobbler.png" alt="Dutch Oven Peach Cobbler" width="640" height="640" loading="lazy" />
-                </figure>
-                <div class="card__body">
-                  <h3 class="card__title">Dutch Oven Peach Cobbler</h3>
-                  <ul class="tags">
-                    <li><a href="/s?q=tag%3Acomfort">#comfort</a></li>
-                    <li><a href="/s?q=tag%3Aholiday">#holiday</a></li>
-                    <li><a href="/s?q=tag%3Autah">#utah</a></li>
-                  </ul>
-                </div>
-              </a>
-            </article>
-          </li>
-
-          <li>
-            <article class="recipe-card">
-              <a class="card__link" href="/static/recipe.html">
-                <figure class="card__media">
-                  <img src="/static/lion-house-rolls.png" alt="Lion House Rolls" width="640" height="640" loading="lazy" />
-                </figure>
-                <div class="card__body">
-                  <h3 class="card__title">Lion House Rolls</h3>
-                  <ul class="tags">
-                    <li><a href="/s?q=tag%3Acomfort">#comfort</a></li>
-                    <li><a href="/s?q=tag%3Aholiday">#holiday</a></li>
-                    <li><a href="/s?q=tag%3Autah">#utah</a></li>
-                  </ul>
-                </div>
-              </a>
-            </article>
-          </li>
-        </ul>
+        {% include "cards.html" %}
       </section>
     </div>
   </main>
