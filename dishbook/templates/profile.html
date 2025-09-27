@@ -6,25 +6,23 @@
       <header class="profile-header">
   <div class="profile-text">
     <h1>{{ author.get_full_name }}</h1>
-    <p>Joined 1 week, 1 day ago Author of {{ recipes|length }} recipes</p>
+    <p>Joined {{ author.date_joined|timesince }} ago Author of {{ recipes|length }} recipe{{ recipes|length|pluralize }}</p>
   </div>
 
+  {% if author.profile.photo %}
   <figure class="profile-image">
     <img
-      src="/static/ben-braiser.png"
-      alt="Profile picture of {{ author.get_full_name }}"
+      src="/profile/{{ author.username }}/photo"
+      alt="{{ author.get_full_name }}'s profile photo"
       loading="lazy" />
   </figure>
+  {% endif %}
 </header>
 
       <section class="about">
-        <p>
-          I cook the kind of food that feels like home, and wander the world from my stove.
-          My recipes are weeknight-friendly, written with clear steps, sensible substitutions,
-          and the occasional gram weight when it helps. I love cast iron, pantry staples, and
-          dishes that scale for friends and neighbors. If you try something, tell me what you
-          changed—variation is the point.
-        </p>
+        {% if author.profile.bio %}
+        <div>{{ author.profile.bio|urlize|linebreaks }}</div>
+        {% endif %}
       </section>
 
       <section class="recipes">

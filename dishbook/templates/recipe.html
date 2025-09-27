@@ -1,66 +1,39 @@
-<!doctype html>
-<html lang="en">
- 
-<head>
-   <meta charset="utf-8">
-  <link rel="stylesheet" href="/static/main.css">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Nunito:ital@0;1&family=Playwrite+US+Trad:wght@100..400&display=swap" rel="stylesheet">
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Recipe</title>
-</head>
-<body>
-    <!-- Site Header -->
- <header class="site-header" role="banner">
-    <div class="site-header__inner">
-      <div class="header-top">
-  <h2 class="brand"><a href="/static/index.html">Dishbook</a></h2>
-
-  <div class="user-strip">
-    <span class="profile-name">Ben Braiser</span>
-    <a class="view-profile-link" href="/static/profile.html">View Profile</a>
-  </div>
-</div>
-
-      <hr class="header-sep">
-
-      <nav class="site-nav" aria-label="Primary">
-        <ul class="site-nav__links">
-          <li><a href="/static/index.html">Home</a></li>
-          <li><a href="/static/profile.html">My Cookbook</a></li>
-        </ul>
-        <form class="site-nav__search" role="search" action="/search" method="get">
-          <label for="q" class="sr-only"> Search Recipes</label>
-          <input id="q" name="q" type="search" placeholder="" aria-label="Search recipes"/>
-          <button type="submit">Search</button>
-        </form>
-      </nav>
-    </div>
-  </header>
+{% include "header.html" with title=recipe.title %}
 
   <!-- Main Content: Recipe Page -->
-  <main id="main" class="main" tabindex="-1">    <!-- Hero / Welcome -->
-
+  <main id="main" class="main" tabindex="-1">
        <div class="recipe-box">
-
     <article class="recipe" itemscope itemtype="https://schema.org/Recipe">
-
     <header class="recipe__header">
-  <h1 class="recipe__title" itemprop="name">Chicken Adobo</h1>
+  <h1 class="recipe__title" itemprop="name">{{ recipe.title }}</h1>
 
   <div class="recipe__meta-row">
     <span class="recipe__byline">
-      By <a href="/static/profile.html" rel="author" itemprop="author">Ben Braiser</a>
+      By <a href="/profile/{{ recipe.author.username }}" rel="author" itemprop="author">{{ recipe.author.get_full_name }}</a>
     </span>
 
-    <span class="recipe__featured">Featured in July 2025</span>
+    {% if recipe.copied_from %}
+    <span class="recipe__based-on">
+      Based on <a href="/recipe/{{ recipe.copied_from.id }}">{{ recipe.copied_from.author.get_full_name }}'s {{ recipe.copied_from.title }}</a>
+    </span>
+    {% endif %}
+
+    {% if copies_count > 0 %}
+    <span class="recipe__variations">
+      <a href="/s">{{ copies_count }} variation{{ copies_count|pluralize }}</a>
+    </span>
+    {% endif %}
+
+    {% if recipe.featured_on %}
+    <span class="recipe__featured">Featured on {{ recipe.featured_on|date:"F Y" }}</span>
+    {% endif %}
 
     <div class="recipe__tags-wrap">
       <span class="tags-label">Tags:</span> 
       <ul class="recipe__tags" aria-label="Tags">
-        <li><a href="/tags/quick">#asian</a></li>
-        <li><a href="/tags/chicken">#comfort</a></li>
+        {% for tag in recipe.sorted_tags %}
+        <li><a href="/s">#{{ tag.name }}</a></li>
+        {% endfor %}
       </ul>
     </div>
   </div>
@@ -69,30 +42,32 @@
       <section class="recipe__intro" aria-labelledby="desc-heading">
         <!-- left column-->
          <div class="recipe__intro-left">
+        {% if recipe.photo %}
         <figure class="recipe__photo" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
-          <img src="/static/chicken-adobo.png" alt="Chicken Adobo in a plate" width="600" height="600" />
-          <meta itemprop="url" content="/assets/recipes/lemon-chicken-pasta.jpg" />
+          <img src="/recipe/{{ recipe.id }}/photo" alt="Photo of {{ recipe.title }}" width="600" height="600" />
+          <meta itemprop="url" content="/recipe/{{ recipe.id }}/photo" />
         </figure>
+        {% endif %}
         
  <dl class="recipe__meta">
     <dt>Prep:</dt>
-    <dd><time itemprop="prepTime" datetime="PT10M">20 min</time></dd>
+    <dd><time itemprop="prepTime" datetime="PT{{ recipe.prep_time_minutes }}M">{{ recipe.prep_time_minutes }} min</time></dd>
 
     <dt>Cook:</dt>
-    <dd><time itemprop="cookTime" datetime="PT20M">40 min</time></dd>
+    <dd><time itemprop="cookTime" datetime="PT{{ recipe.cook_time_minutes }}M">{{ recipe.cook_time_minutes }} min</time></dd>
 
     <dt>Total:</dt>
-    <dd><time itemprop="totalTime" datetime="PT30M">60 min</time></dd>
+    <dd><time itemprop="totalTime" datetime="PT{{ recipe.total_time }}M">{{ recipe.total_time }} min</time></dd>
 
     <dt>Yield:</dt>
-    <dd><span itemprop="recipeYield">4 servings</span></dd>
+    <dd><span itemprop="recipeYield">{{ recipe.serves }} serving{{ recipe.serves|pluralize }}</span></dd>
   </dl>
   </div>
 
   <!--right column-->
   <div class="recipe__intro-right">
   <div class="recipe__description">
-    <p itemprop="description">A fast, weeknight-friendly pasta with seared chicken, lemon, garlic, and parsley. Silky sauce, pantry staples, kid-approved.</p>
+    <div itemprop="description">{{ recipe.description|urlize|linebreaks }}</div>
   </div>
         </div>
       </section>
@@ -101,37 +76,20 @@
         <aside class="recipe__ingredients" aria-labelledby="ingredients-heading">
           <h3 id="ingredients-heading">Ingredients</h3>
           <ul itemprop="recipeIngredient">
-            <li>12 oz pasta (spaghetti or linguine)</li>
-            <li>2 chicken breasts, thinly sliced</li>
-            <li>2 tbsp olive oil</li>
-            <li>3 cloves garlic, minced</li>
-            <li>1 lemon (zest + 3 tbsp juice)</li>
-            <li>1/2 cup grated Parmesan</li>
-            <li>1/2 cup pasta water (reserved)</li>
-            <li>Salt & pepper</li>
-            <li>2 tbsp butter</li>
-            <li>1/4 cup chopped parsley</li>
+            {% for ingredient in aggregated_ingredients %}
+              <li>{{ ingredient.amount }} {{ ingredient.name }}</li>
+            {% endfor %}
           </ul>
         </aside>
 
         <section class="recipe__steps" aria-labelledby="steps-heading">
           <h3 id="steps-heading">Steps</h3>
           <ol itemprop="recipeInstructions">
+            {% for step in recipe.steps.all %}
             <li itemprop="itemListElement" itemscope itemtype="https://schema.org/HowToStep">
-              <span itemprop="text">Cook pasta in salted water until al dente. Reserve 1/2 cup pasta water; drain.</span>
+              <span itemprop="text">{{ step.description }}</span>
             </li>
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/HowToStep">
-              <span itemprop="text">Season chicken with salt and pepper. Sear in olive oil over medium-high until browned and cooked through; remove.</span>
-            </li>
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/HowToStep">
-              <span itemprop="text">Lower heat; add butter and garlic, cook 30 seconds. Stir in lemon zest and juice.</span>
-            </li>
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/HowToStep">
-              <span itemprop="text">Add pasta, chicken, and some reserved water; toss. Off heat, add Parmesan until glossy. Adjust with more water if needed.</span>
-            </li>
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/HowToStep">
-              <span itemprop="text">Finish with parsley, season to taste, and serve immediately.</span>
-            </li>
+            {% endfor %}
           </ol>
         </section>
       </section>
@@ -139,5 +97,4 @@
   </main>
   </div>
 </body>
-
 </html>

@@ -11,7 +11,7 @@
           <div class="card__body">
             <h3 class="card__title">{{ recipe.title }}</h3>
             <ul class="tags">
-              {% for tag in recipe.tags.all %}
+              {% for tag in recipe.sorted_tags %}
                 <li><a href="/s">#{{ tag.name }}</a></li>
               {% endfor %}
             </ul>

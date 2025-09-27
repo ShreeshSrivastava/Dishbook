@@ -8,7 +8,14 @@ def index(request):
     return render(request, "index.html", {"recipes": featured_recipes})
 
 def recipe(request, recipe_id):
-    return render(request, "recipe.html", { })
+    recipe = get_object_or_404(models.Recipe, id=recipe_id)
+    copies_count = recipe.copies.count()
+    aggregated_ingredients = recipe.aggregated_ingredients()
+    return render(request, "recipe.html", {
+        "recipe": recipe, 
+        "copies_count": copies_count,
+        "aggregated_ingredients": aggregated_ingredients
+    })
 
 def search(request):
     all_recipes = models.Recipe.objects.all()
