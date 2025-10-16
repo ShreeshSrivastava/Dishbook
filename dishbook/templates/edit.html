@@ -1,0 +1,105 @@
+{% include "header.html" with title=recipe.title %}
+
+<form action="/recipe/{{ recipe.id }}/edit/" method="post">
+    {% csrf_token %}
+  <!-- Main Content: Recipe Page -->
+  <main id="main" class="main" tabindex="-1">
+       <div class="recipe-box">
+    <article class="recipe" itemscope itemtype="https://schema.org/Recipe">
+    <header class="recipe__header">
+  <h1 class="recipe__title" itemprop="name">{{ recipe.title }}
+    <button type="submit">Save</button>
+  </h1>
+
+  <div class="recipe__meta-row">
+    <span class="recipe__byline">
+      By <a href="/profile/{{ recipe.author.username }}" rel="author" itemprop="author">{{ recipe.author.get_full_name }}</a>
+    </span>
+
+    {% if recipe.copied_from %}
+    <span class="recipe__based-on">
+      Based on <a href="/recipe/{{ recipe.copied_from.id }}">{{ recipe.copied_from.author.get_full_name }}'s {{ recipe.copied_from.title }}</a>
+    </span>
+    {% endif %}
+
+    {% if copies_count > 0 %}
+    <span class="recipe__variations">
+      <a href="/s">{{ copies_count }} variation{{ copies_count|pluralize }}</a>
+    </span>
+    {% endif %}
+
+    {% if recipe.featured_on %}
+    <span class="recipe__featured">Featured on {{ recipe.featured_on|date:"F Y" }}</span>
+    {% endif %}
+
+    <div class="recipe__tags-wrap">
+      <span class="tags-label">Tags:</span> 
+      <ul class="recipe__tags" aria-label="Tags">
+        {% for tag in recipe.sorted_tags %}
+        <li><a href="/s">#{{ tag.name }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</header>
+
+      <section class="recipe__intro" aria-labelledby="desc-heading">
+        <!-- left column-->
+         <div class="recipe__intro-left">
+        {% if recipe.photo %}
+        <figure class="recipe__photo" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
+          <img src="/recipe/{{ recipe.id }}/photo" alt="Photo of {{ recipe.title }}" width="600" height="600" />
+          <meta itemprop="url" content="/recipe/{{ recipe.id }}/photo" />
+        </figure>
+        {% endif %}
+        
+ <dl class="recipe__meta">
+    <dt>Prep:</dt>
+    <dd><time itemprop="prepTime" datetime="PT{{ recipe.prep_time_minutes }}M">{{ recipe.prep_time_minutes }} min</time></dd>
+
+    <dt>Cook:</dt>
+    <dd><time itemprop="cookTime" datetime="PT{{ recipe.cook_time_minutes }}M">{{ recipe.cook_time_minutes }} min</time></dd>
+
+    <dt>Total:</dt>
+    <dd><time itemprop="totalTime" datetime="PT{{ recipe.total_time }}M">{{ recipe.total_time }} min</time></dd>
+
+    <dt>Yield:</dt>
+    <dd><span itemprop="recipeYield">{{ recipe.serves }} serving{{ recipe.serves|pluralize }}</span></dd>
+  </dl>
+  </div>
+
+  <!--right column-->
+  <div class="recipe__intro-right">
+  <div class="recipe__description">
+    <div itemprop="description">{{ recipe.description|urlize|linebreaks }}</div>
+  </div>
+        </div>
+      </section>
+
+      <section class="recipe__body" aria-labelledby="recipe-heading">
+        <aside class="recipe__ingredients" aria-labelledby="ingredients-heading">
+          <h3 id="ingredients-heading">Ingredients</h3>
+          <ul itemprop="recipeIngredient">
+            {% for ingredient in aggregated_ingredients %}
+              <li>{{ ingredient.amount }} {{ ingredient.name }}</li>
+            {% endfor %}
+          </ul>
+        </aside>
+
+        <section class="recipe__steps" aria-labelledby="steps-heading">
+          <h3 id="steps-heading">Steps</h3>
+          <ol itemprop="recipeInstructions">
+            {% for step in recipe.steps.all %}
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/HowToStep">
+              <span itemprop="text">{{ step.description }}</span>
+            </li>
+            {% endfor %}
+          </ol>
+        </section>
+      </section>
+    </article>
+  </main>
+  </div>
+</body>
+</html>
+</form>

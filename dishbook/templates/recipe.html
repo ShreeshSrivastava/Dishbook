@@ -5,7 +5,11 @@
        <div class="recipe-box">
     <article class="recipe" itemscope itemtype="https://schema.org/Recipe">
     <header class="recipe__header">
-  <h1 class="recipe__title" itemprop="name">{{ recipe.title }}</h1>
+  <h1 class="recipe__title" itemprop="name">{{ recipe.title }}
+    <form action="/recipe/{{ recipe.id }}/edit/" method="get">
+      <button type="submit">Edit</button>
+    </form>
+  </h1>
 
   <div class="recipe__meta-row">
     <span class="recipe__byline">

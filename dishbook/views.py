@@ -1,6 +1,7 @@
 from . import models
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
+
 
 # Create your views here.
 def index(request):
@@ -28,3 +29,11 @@ def profile(request, username):
 
 def signin(request):
     return render(request, "login.html", { })
+
+def edit_recipe(request, recipe_id):
+    recipe = get_object_or_404(models.Recipe, id=recipe_id)
+    if request.method == "GET":
+        return render(request, "edit.html", {"recipe": recipe})
+    elif request.method == "POST":
+        return redirect(f"/recipe/{recipe_id}/")
+
