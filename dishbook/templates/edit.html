@@ -3,7 +3,7 @@
 
   <!-- Main Content: Recipe Page -->
   <main id="main" class="main" tabindex="-1">
-    <form action="/recipe/{{ recipe.id }}/edit/" method="post">
+    <form action="/recipe/{{ recipe.id }}/" method="post">
         {% csrf_token %}
        <div class="recipe-box">
     <article class="recipe" itemscope itemtype="https://schema.org/Recipe">
