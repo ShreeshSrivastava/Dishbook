@@ -1,9 +1,10 @@
 {% include "header.html" with title=recipe.title %}
 
-<form action="/recipe/{{ recipe.id }}/edit/" method="post">
-    {% csrf_token %}
+
   <!-- Main Content: Recipe Page -->
   <main id="main" class="main" tabindex="-1">
+    <form action="/recipe/{{ recipe.id }}/edit/" method="post">
+        {% csrf_token %}
        <div class="recipe-box">
     <article class="recipe" itemscope itemtype="https://schema.org/Recipe">
     <header class="recipe__header">
@@ -98,8 +99,8 @@
         </section>
       </section>
     </article>
+</form>
   </main>
   </div>
 </body>
 </html>
-</form>
