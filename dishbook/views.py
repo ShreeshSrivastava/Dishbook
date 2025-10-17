@@ -35,5 +35,5 @@ def edit_recipe(request, recipe_id):
     if request.method == "GET":
         return render(request, "edit.html", {"recipe": recipe})
     elif request.method == "POST":
-        return redirect("recipe", recipe_id=recipe_id)
+        return redirect(f"/recipe/{recipe_id}")
 
