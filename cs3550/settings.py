@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Disable automatic slash appending to avoid conflicts with form actions
+APPEND_SLASH = False
+
 
 # Application definition
 

@@ -3,12 +3,15 @@
 
   <!-- Main Content: Recipe Page -->
   <main id="main" class="main" tabindex="-1">
-    <form action="/recipe/{{ recipe.id }}/" method="post">
+
+    <form action="/recipe/{{ recipe.id }}/edit/" method="post">
         {% csrf_token %}
        <div class="recipe-box">
     <article class="recipe" itemscope itemtype="https://schema.org/Recipe">
     <header class="recipe__header">
-  <h1 class="recipe__title" itemprop="name">{{ recipe.title }}
+  <h1 class="recipe__title" itemprop="name">
+    <input type="text" id="title" name="title" value="{{ recipe.title }}" size="50">
+    <label for="title" class="visually-hidden">Recipe Title</label>
     <button type="submit">Save</button>
   </h1>
 
@@ -44,6 +47,15 @@
   </div>
 </header>
 
+{% if errors_list %}
+<div class="errors_list">
+  {% for errors in errors_list %}
+  <output class="error-message">
+  {{ error }}
+  {% endfor %}
+</output><br>
+</div>
+{% endif %}
       <section class="recipe__intro" aria-labelledby="desc-heading">
         <!-- left column-->
          <div class="recipe__intro-left">
@@ -56,45 +68,78 @@
         
  <dl class="recipe__meta">
     <dt>Prep:</dt>
-    <dd><time itemprop="prepTime" datetime="PT{{ recipe.prep_time_minutes }}M">{{ recipe.prep_time_minutes }} min</time></dd>
+    <dd><time itemprop="prepTime" datetime="PT{{ recipe.prep_time_minutes }}M">
+        <input type="number" id="prep_time_minutes" name="prep_time_minutes" value="{{ recipe.prep_time_minutes}}" size="3">
+        <label for="prep_time_minutes" class="visually-hidden"> Prep time in minutes</label>
+         min</time></dd>
 
     <dt>Cook:</dt>
-    <dd><time itemprop="cookTime" datetime="PT{{ recipe.cook_time_minutes }}M">{{ recipe.cook_time_minutes }} min</time></dd>
+    <dd><time itemprop="cookTime" datetime="PT{{ recipe.cook_time_minutes }}M">
+<input type="number" id="cook_time" name="cook_time" value="{{ recipe.cook_time_minutes}}" size="3">
+<label for="cook_time" class="visually-hidden">Cook time in minutes</label>
+        min</time></dd>
 
     <dt>Total:</dt>
-    <dd><time itemprop="totalTime" datetime="PT{{ recipe.total_time }}M">{{ recipe.total_time }} min</time></dd>
+    <dd><time itemprop="totalTime" datetime="PT{{ recipe.total_time }}M">
+        <input type="number" id="total_time" name="total_time" value="{{ recipe.total_time }}" size="3" readonly>
+        <label for="total_time" class="visually-hidden">Total time in minutes</label>
+         min</time></dd>
 
     <dt>Yield:</dt>
-    <dd><span itemprop="recipeYield">{{ recipe.serves }} serving{{ recipe.serves|pluralize }}</span></dd>
+    <dd><span itemprop="recipeYield">
+<input type="number" id="serves" name="serves" value="{{recipe.serves}}" size="3">
+<label for="serves" class="visually-hidden">Numbers of servings</label> 
+serving{{ recipe.serves|pluralize }}
+ </span></dd>
   </dl>
   </div>
 
   <!--right column-->
   <div class="recipe__intro-right">
   <div class="recipe__description">
-    <div itemprop="description">{{ recipe.description|urlize|linebreaks }}</div>
+<div itemprop="description">
+        <textarea id="description" name="description" rows="10" style="width: 100%; resize: vertical;">{{ recipe.description}}</textarea>      
+            <label for="description" class="visually-hidden">Recipe description</label>
+    </div>
   </div>
         </div>
       </section>
 
       <section class="recipe__body" aria-labelledby="recipe-heading">
+
         <aside class="recipe__ingredients" aria-labelledby="ingredients-heading">
-          <h3 id="ingredients-heading">Ingredients</h3>
-          <ul itemprop="recipeIngredient">
-            {% for ingredient in aggregated_ingredients %}
-              <li>{{ ingredient.amount }} {{ ingredient.name }}</li>
-            {% endfor %}
-          </ul>
+            <h3 id="ingredients-heading">Ingredients</h3>
+            <ul itemprop="recipeIngredient">
+                {% for ingredient in aggregated_ingredients %}
+                <li>{{ ingredient.amount }} {{ ingredient.name }}</li>
+                {% endfor %}
+            </ul>
         </aside>
 
         <section class="recipe__steps" aria-labelledby="steps-heading">
           <h3 id="steps-heading">Steps</h3>
           <ol itemprop="recipeInstructions">
+
             {% for step in recipe.steps.all %}
             <li itemprop="itemListElement" itemscope itemtype="https://schema.org/HowToStep">
-              <span itemprop="text">{{ step.description }}</span>
+                <textarea id="step_{{ step.id }}" name="step_{{ step.id }}" rows="{{ step.calculate_rows }}" style="width: 100%; resize: vertical; vertical-align: top;">{{ step.description }}</textarea>
+                <label for="step_{{ step.id }}" class="visually-hidden">Step {{ step.order }} description</label>
+                
+                <ul style="margin-left: 1rem; padding: 0.25rem 0;">
+                    {% for ingredient in step.ingredients.all %}
+                    <li style="padding: 0.25rem 0;">
+                        <input type="number" id="ingredient_amount_{{ ingredient.id }}" name="ingredient_amount_{{ ingredient.id }}" value="{{ ingredient.amount }}" size="3">
+                        <input type="text" id="ingredient_unit_{{ ingredient.id }}" name="ingredient_unit_{{ ingredient.id }}" value="{{ ingredient.unit }}" size="7">
+                        <input type="text" id="ingredient_name_{{ ingredient.id }}" name="ingredient_name_{{ ingredient.id }}" value="{{ ingredient.name }}" size="25">
+                        <label for="ingredient_amount_{{ ingredient.id }}" class="visually-hidden">Amount</label>
+                        <label for="ingredient_unit_{{ ingredient.id }}" class="visually-hidden">Unit</label>
+                        <label for="ingredient_name_{{ ingredient.id }}" class="visually-hidden">Name</label>
+                    </li>
+                    {% endfor %}
+                </ul>
             </li>
             {% endfor %}
+            
           </ol>
         </section>
       </section>

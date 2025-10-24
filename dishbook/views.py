@@ -33,7 +33,57 @@ def signin(request):
 def edit_recipe(request, recipe_id):
     recipe = get_object_or_404(models.Recipe, id=recipe_id)
     if request.method == "GET":
-        return render(request, "edit.html", {"recipe": recipe})
+        aggregated_ingredients = recipe.aggregated_ingredients()
+        return render(request, "edit.html", {
+            "recipe": recipe,
+            "aggregated_ingredients": aggregated_ingredients
+        })
     elif request.method == "POST":
+        errors_list = []
+        if not request.POST.get("title"):
+            errors_list.append("Title is required")
+        if not request.POST.get("prep_time_minutes"):
+            errors_list.append("Prep time is required")
+        if not request.POST.get("cook_time"):
+            errors_list.append("Cook time is required")
+        if not request.POST.get("total_time"):
+            errors_list.append("Total time is required")
+        if not request.POST.get("serves"):
+            errors_list.append("Serves is required")
+           
+        
+        updated_objects = []        
+        # Updating recipe objesct
+        recipe.title = request.POST.get("title")
+        recipe.prep_time_minutes = int(request.POST.get("prep_time_minutes"))
+        recipe.cook_time_minutes = int(request.POST.get("cook_time"))
+        recipe.total_time = int(request.POST.get("total_time"))
+        recipe.serves = int(request.POST.get("serves"))
+        recipe.description = request.POST.get("description")
+        updated_objects.append(recipe)
+        
+        for step in recipe.steps.all():
+            step.description = request.POST.get(f'step_{step.id}')
+            updated_objects.append(step)
+
+        for step in recipe.steps.all():
+            for ingredient in step.ingredients.all():
+                # Handle empty values safely
+                amount_str = request.POST.get(f'ingredient_amount_{ingredient.id}')
+                if amount_str:
+                    ingredient.amount = float(amount_str)
+                else:
+                    ingredient.amount = 0  # Default value
+                
+                ingredient.unit = request.POST.get(f'ingredient_unit_{ingredient.id}')
+                ingredient.name = request.POST.get(f'ingredient_name_{ingredient.id}')
+                updated_objects.append(ingredient)
+
+        
+      
+        for obj in updated_objects: obj.save()
+        
         return redirect(f"/recipe/{recipe_id}")
+
+
 

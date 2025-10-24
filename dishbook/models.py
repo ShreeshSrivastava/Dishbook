@@ -69,6 +69,14 @@ class Step(models.Model):
     order = models.IntegerField()
     description = models.TextField()
 
+    def calculate_rows(self):
+        """Calculate the number of rows needed for textarea based on description length"""
+        if not self.description:
+            return 1
+        length = len(self.description)
+        rows = (length + 49) // 50 + 1
+        return max(1, rows)
+        
 class Ingredient(models.Model):
     step = models.ForeignKey(Step, on_delete=models.CASCADE, related_name='ingredients')
     amount = models.CharField(max_length=50)
