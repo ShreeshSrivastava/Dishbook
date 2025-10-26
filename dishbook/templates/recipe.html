@@ -47,12 +47,12 @@
       <section class="recipe__intro" aria-labelledby="desc-heading">
         <!-- left column-->
          <div class="recipe__intro-left">
-        {% if recipe.photo %}
+        
         <figure class="recipe__photo" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
           <img src="/recipe/{{ recipe.id }}/photo" alt="Photo of {{ recipe.title }}" width="600" height="600" />
           <meta itemprop="url" content="/recipe/{{ recipe.id }}/photo" />
         </figure>
-        {% endif %}
+        
         
  <dl class="recipe__meta">
     <dt>Prep:</dt>

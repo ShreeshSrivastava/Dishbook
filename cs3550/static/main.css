@@ -747,3 +747,24 @@ input[type="text"][name*="title"] {
   width: 85%;
   padding: 0.25rem 0.5rem;
 }
+
+/* Error message styling */
+.error-messages {
+  background-color: #ffebee;
+  border: 2px solid #f44336;
+  border-radius: 4px;
+  padding: 1rem;
+  margin: 1rem 0;
+  color: #c62828;
+}
+
+.error-messages ul {
+  margin: 0;
+  padding-left: 1.5rem;
+  list-style-type: disc;
+}
+
+.error-messages li {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}

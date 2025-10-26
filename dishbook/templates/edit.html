@@ -48,23 +48,25 @@
 </header>
 
 {% if errors_list %}
-<div class="errors_list">
-  {% for errors in errors_list %}
-  <output class="error-message">
-  {{ error }}
-  {% endfor %}
-</output><br>
-</div>
+<output class="error-messages">
+  <ul>
+    {% for error in errors_list %}
+    <li>{{ error }}</li>
+    {% endfor %}
+  </ul>
+</output>
 {% endif %}
+
+
       <section class="recipe__intro" aria-labelledby="desc-heading">
         <!-- left column-->
          <div class="recipe__intro-left">
-        {% if recipe.photo %}
+      
         <figure class="recipe__photo" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
           <img src="/recipe/{{ recipe.id }}/photo" alt="Photo of {{ recipe.title }}" width="600" height="600" />
           <meta itemprop="url" content="/recipe/{{ recipe.id }}/photo" />
         </figure>
-        {% endif %}
+        
         
  <dl class="recipe__meta">
     <dt>Prep:</dt>
@@ -136,6 +138,15 @@ serving{{ recipe.serves|pluralize }}
                         <label for="ingredient_name_{{ ingredient.id }}" class="visually-hidden">Name</label>
                     </li>
                     {% endfor %}
+                    <li style="padding: 0.25rem 0;">
+                      <input type="number" id="extraIngredientAmount" name="extraIngredient" value="" size="3">
+                      <input type="text" id="extraIngredintUnit" name="extraIngredientUnit" value="extraIngredientUnit" size="7">
+                      <input type="text" id="extraIngredientName" name="extraIngredientName" value="extraIngredientName" size="25">
+                      <label for="extraIngredientAmount" class="visually-hidden">Amount</label>
+                      <label for="extraIngredientUnit" class="visually-hidden">Unit</label>
+                      <label for ="extraIngredientName" class="visually-hidden">Name</label>
+                    </li>
+
                 </ul>
             </li>
             {% endfor %}
