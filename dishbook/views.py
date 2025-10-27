@@ -45,7 +45,7 @@ def edit_recipe(request, recipe_id):
         # Get form data
         title = request.POST.get("title", "")
         prep_time_str = request.POST.get("prep_time_minutes", "")
-        cook_time_str = request.POST.get("cook_time", "")
+        cook_time_str = request.POST.get("cook_time_minutes", "")
         total_time_str = request.POST.get("total_time", "")
         serves_str = request.POST.get("serves", "")
         description = request.POST.get("description", "")
@@ -105,11 +105,12 @@ def edit_recipe(request, recipe_id):
             errors_list.append("Description is required")
         
         # Update steps with form data BEFORE validation
-        for step in recipe.steps.all():
+        steps_list = list(recipe.steps.all())
+        for step in steps_list:
             step.description = request.POST.get(f'step_{step.id}', "")
         
         # Validate steps
-        for step in recipe.steps.all():
+        for step in steps_list:
             if not step.description or step.description.strip() == "":
                 errors_list.append(f"Step {step.order} description is required")
         
@@ -294,9 +295,8 @@ def edit_recipe(request, recipe_id):
             # No errors, save and redirect
             recipe.save()
             
-            # Save steps and their ingredients
-            steps = list(recipe.steps.all())
-            for step in steps:
+            # Save steps and their ingredients (use the updated steps_list)
+            for step in steps_list:
                 step.save()
                 for ingredient in step.ingredients.all():
                     ingredient.save()
