@@ -139,17 +139,34 @@ serving{{ recipe.serves|pluralize }}
                     </li>
                     {% endfor %}
                     <li style="padding: 0.25rem 0;">
-                      <input type="number" id="extraIngredientAmount" name="extraIngredient" value="" size="3">
-                      <input type="text" id="extraIngredintUnit" name="extraIngredientUnit" value="extraIngredientUnit" size="7">
-                      <input type="text" id="extraIngredientName" name="extraIngredientName" value="extraIngredientName" size="25">
-                      <label for="extraIngredientAmount" class="visually-hidden">Amount</label>
-                      <label for="extraIngredientUnit" class="visually-hidden">Unit</label>
-                      <label for ="extraIngredientName" class="visually-hidden">Name</label>
+                      <input type="number" id="extra_ingredient_amount_{{ step.id }}" name="extra_ingredient_amount_{{ step.id }}" value="" size="3">
+                      <input type="text" id="extra_ingredient_unit_{{ step.id }}" name="extra_ingredient_unit_{{ step.id }}" value="" size="7">
+                      <input type="text" id="extra_ingredient_name_{{ step.id }}" name="extra_ingredient_name_{{ step.id }}" value="" size="25">
+                      <label for="extra_ingredient_amount_{{ step.id }}" class="visually-hidden">Amount</label>
+                      <label for="extra_ingredient_unit_{{ step.id }}" class="visually-hidden">Unit</label>
+                      <label for="extra_ingredient_name_{{ step.id }}" class="visually-hidden">Name</label>
                     </li>
 
                 </ul>
             </li>
             {% endfor %}
+            
+            <!-- Extra step -->
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/HowToStep">
+                <textarea id="extra_step_description" name="extra_step_description" rows="3" style="width: 100%; resize: vertical; vertical-align: top;"></textarea>
+                <label for="extra_step_description" class="visually-hidden">Extra step description</label>
+                
+                <ul style="margin-left: 1rem; padding: 0.25rem 0;">
+                    <li style="padding: 0.25rem 0;">
+                      <input type="number" id="extra_step_ingredient_amount" name="extra_step_ingredient_amount" value="" size="3">
+                      <input type="text" id="extra_step_ingredient_unit" name="extra_step_ingredient_unit" value="" size="7">
+                      <input type="text" id="extra_step_ingredient_name" name="extra_step_ingredient_name" value="" size="25">
+                      <label for="extra_step_ingredient_amount" class="visually-hidden">Amount</label>
+                      <label for="extra_step_ingredient_unit" class="visually-hidden">Unit</label>
+                      <label for="extra_step_ingredient_name" class="visually-hidden">Name</label>
+                    </li>
+                </ul>
+            </li>
             
           </ol>
         </section>

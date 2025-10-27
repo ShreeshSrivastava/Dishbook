@@ -1,6 +1,7 @@
 from . import models
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
+from django.db.models import Max
 
 
 # Create your views here.
@@ -103,10 +104,13 @@ def edit_recipe(request, recipe_id):
         if not description or description.strip() == "":
             errors_list.append("Description is required")
         
+        # Update steps with form data BEFORE validation
+        for step in recipe.steps.all():
+            step.description = request.POST.get(f'step_{step.id}', "")
+        
         # Validate steps
         for step in recipe.steps.all():
-            step_desc = request.POST.get(f'step_{step.id}', "")
-            if not step_desc or step_desc.strip() == "":
+            if not step.description or step.description.strip() == "":
                 errors_list.append(f"Step {step.order} description is required")
         
         # Validate ingredients
@@ -137,6 +141,111 @@ def edit_recipe(request, recipe_id):
                 elif len(name) > 100:
                     errors_list.append(f"Ingredient name must be 100 characters or less")
         
+        # Handle extra step and ingredients
+        extra_step_description = request.POST.get('extra_step_description', "").strip()
+        extra_step_created = False
+        new_objects = []  # Store new objects to save if validation passes
+        
+        # Check if extra step has content
+        if extra_step_description:
+            # Create new step object (don't save yet) - Fixed Max import
+            max_order = recipe.steps.all().aggregate(Max('order'))['order__max'] or 0
+            new_step = models.Step(
+                recipe=recipe,
+                order=max_order + 1,
+                description=extra_step_description
+            )
+            new_objects.append(new_step)
+            extra_step_created = True
+        
+        # Handle extra ingredients for existing steps
+        for step in recipe.steps.all():
+            amount_str = request.POST.get(f'extra_ingredient_amount_{step.id}', "")
+            unit = request.POST.get(f'extra_ingredient_unit_{step.id}', "").strip()
+            name = request.POST.get(f'extra_ingredient_name_{step.id}', "").strip()
+            
+            # Check if any field is non-empty
+            if amount_str or unit or name:
+                # Validate amount (required if any field is filled)
+                if not amount_str:
+                    errors_list.append(f"Extra ingredient amount for step {step.order} is required")
+                else:
+                    try:
+                        amount = float(amount_str)
+                        if amount <= 0:
+                            errors_list.append(f"Extra ingredient amount for step {step.order} must be positive")
+                    except ValueError:
+                        errors_list.append(f"Extra ingredient amount for step {step.order} must be a valid number")
+                
+                # Validate unit (max 50 chars)
+                if len(unit) > 50:
+                    errors_list.append(f"Extra ingredient unit for step {step.order} must be 50 characters or less")
+                
+                # Validate name (required if any field is filled)
+                if not name:
+                    errors_list.append(f"Extra ingredient name for step {step.order} is required")
+                elif len(name) > 100:
+                    errors_list.append(f"Extra ingredient name for step {step.order} must be 100 characters or less")
+                
+                # If validation passes, create ingredient object
+                if amount_str and name:
+                    try:
+                        amount = float(amount_str)
+                        if amount > 0:
+                            new_ingredient = models.Ingredient(
+                                step=step,
+                                amount=str(amount),
+                                unit=unit,
+                                name=name
+                            )
+                            new_objects.append(new_ingredient)
+                    except ValueError:
+                        pass  # Error already added above
+        
+        # Handle extra ingredient for extra step
+        if extra_step_created:
+            amount_str = request.POST.get('extra_step_ingredient_amount', "")
+            unit = request.POST.get('extra_step_ingredient_unit', "").strip()
+            name = request.POST.get('extra_step_ingredient_name', "").strip()
+            
+            # Check if any field is non-empty
+            if amount_str or unit or name:
+                # Validate amount (required if any field is filled)
+                if not amount_str:
+                    errors_list.append("Extra ingredient amount for extra step is required")
+                else:
+                    try:
+                        amount = float(amount_str)
+                        if amount <= 0:
+                            errors_list.append("Extra ingredient amount for extra step must be positive")
+                    except ValueError:
+                        errors_list.append("Extra ingredient amount for extra step must be a valid number")
+                
+                # Validate unit (max 50 chars)
+                if len(unit) > 50:
+                    errors_list.append("Extra ingredient unit for extra step must be 50 characters or less")
+                
+                # Validate name (required if any field is filled)
+                if not name:
+                    errors_list.append("Extra ingredient name for extra step is required")
+                elif len(name) > 100:
+                    errors_list.append("Extra ingredient name for extra step must be 100 characters or less")
+                
+                # If validation passes, create ingredient object
+                if amount_str and name:
+                    try:
+                        amount = float(amount_str)
+                        if amount > 0:
+                            new_ingredient = models.Ingredient(
+                                step=new_step,
+                                amount=str(amount),
+                                unit=unit,
+                                name=name
+                            )
+                            new_objects.append(new_ingredient)
+                    except ValueError:
+                        pass  # Error already added above
+        
         # Update recipe object with form data (even if invalid)
         recipe.title = title
         recipe.description = description
@@ -162,10 +271,6 @@ def edit_recipe(request, recipe_id):
         except ValueError:
             recipe.serves = 1
         
-        # Update steps with form data
-        for step in recipe.steps.all():
-            step.description = request.POST.get(f'step_{step.id}', "")
-        
         # Update ingredients with form data
         for step in recipe.steps.all():
             for ingredient in step.ingredients.all():
@@ -188,11 +293,18 @@ def edit_recipe(request, recipe_id):
         else:
             # No errors, save and redirect
             recipe.save()
-            for step in recipe.steps.all():
+            
+            # Save steps and their ingredients
+            steps = list(recipe.steps.all())
+            for step in steps:
                 step.save()
-            for step in recipe.steps.all():
                 for ingredient in step.ingredients.all():
                     ingredient.save()
+            
+            # Save new objects (extra step and ingredients)
+            for obj in new_objects:
+                obj.save()
+            
             return redirect(f"/recipe/{recipe_id}")
 
 
