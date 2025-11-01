@@ -27,8 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-# Disable automatic slash appending to avoid conflicts with form actions
-APPEND_SLASH = False
+# Enable automatic slash appending so /login redirects to /login/
+APPEND_SLASH = True
 
 
 # Application definition
@@ -114,6 +114,7 @@ USE_I18N = True
 
 USE_TZ = True
 
+LOGIN_URL = "/login/"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/

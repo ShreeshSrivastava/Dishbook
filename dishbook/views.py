@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
 from django.db.models import Max
 from . import models
+from django.contrib.auth import authenticate, login, logout
 
 
 # Create your views here.
@@ -29,7 +30,19 @@ def profile(request, username):
     return render(request, "profile.html", {"author": author, "recipes": user_recipes})
 
 def signin(request):
-    return render(request, "login.html", { })
+    if request.method == "POST":
+        username = (request.POST.get("username") or "").strip()
+        password = request.POST.get("password") or ""
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect(f"/profile/{user.username}")
+    return render(request, "login.html")
+
+
+def signout(request):
+    logout(request)
+    return redirect("/login/")
 
 def edit_recipe(request, recipe_id):
     recipe = get_object_or_404(models.Recipe, id=recipe_id)

@@ -1,53 +1,15 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital@0;1&family=Playwrite+US+Trad:wght@100..400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/main.css"/>
-  <title>Login – Dishbook</title>
-</head>
-<body>
-      <!-- Site Header -->
- <header class="site-header" role="banner">
-    <div class="site-header__inner">
-      <div class="header-top">
-  <h2 class="brand"><a href="/">Dishbook</a></h2>
-
-  <div class="user-strip">
-    <span class="profile-name">Ben Braiser</span>
-    <a class="view-profile-link" href="/profile/b">View Profile</a>
-  </div>
-</div>
-
-      <hr class="header-sep">
-
-      <nav class="site-nav" aria-label="Primary">
-        <ul class="site-nav__links">
-          <li><a href="/">Home</a></li>
-          <li><a href="/profile/b">My Cookbook</a></li>
-        </ul>
-        <form class="site-nav__search" role="search" action="/s" method="get">
-          <label for="q" class="sr-only"> Search Recipes</label>
-          <input id="q" name="q" type="search" placeholder="" aria-label="Search recipes"/>
-          <button type="submit">Search</button>
-        </form>
-      </nav>
-    </div>
-  </header>
+{% include "header.html" with title="Login – Dishbook" %}
 
   <!-- Main Content -->
-  <main id="main" class="main" tabindex="-1">    <!-- Hero / Welcome -->
+  <main id="main" class="main" tabindex="-1">
     <div class="login-box">
       <h2>Sign in to Dishbook</h2>
 
-      <form action="/login" method="post" aria-describedby="login-help">
+      <form action="/login/" method="post" aria-describedby="login-help">
+        {% csrf_token %}
         <div>
-          <label for="email">Username:</label>
-          <input id="email" name="email" type="email" autocomplete="username" required /> 
+          <label for="username">Username:</label>
+          <input id="username" name="username" type="text" autocomplete="username" required />
         </div>
 
         <div>
