@@ -122,11 +122,12 @@ def parse_recipe(lines, author):
         with asset(metadata["photo"], "rb") as f:
             recipe.photo.save(metadata["photo"], File(f), save=True)
     
-    # Default is_public based on title hash
-    #h = hashlib.md5(title.encode('utf-8')).hexdigest()
-    #num = int(h[8], 16)
-    #recipe.is_public = num >= 10
-    #recipe.save()
+    # Default is_public based on title hash if field exists
+    if hasattr(recipe, "is_public"):
+        h = hashlib.md5(title.encode('utf-8')).hexdigest()
+        num = int(h[8], 16)
+        recipe.is_public = num >= 10
+        recipe.save(update_fields=["is_public"])
     
     # Parse steps and ingredients
     i = 0

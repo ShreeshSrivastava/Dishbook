@@ -1,3 +1,5 @@
+
+
 {% include "header.html" with title=recipe.title %}
 
   <!-- Main Content: Recipe Page -->
@@ -7,10 +9,20 @@
     <header class="recipe__header">
   <h1 class="recipe__title" itemprop="name">
     {{ recipe.title }}
+  </h1>
+  {% if user.is_authenticated and user == recipe.author %}
+  <div class="recipe__actions">
     <form action="/recipe/{{ recipe.id }}/edit/" method="get" style="display:inline;">
       <button type="submit">Edit</button>
     </form>
-  </h1>
+    {% if not recipe.is_public %}
+    <form action="/recipe/{{ recipe.id }}/makepublic" method="post" style="display:inline;">
+      {% csrf_token %}
+      <button type="submit">Make Public</button>
+    </form>
+    {% endif %}
+  </div>
+  {% endif %}
 
   <div class="recipe__meta-row">
     <span class="recipe__byline">
@@ -48,10 +60,12 @@
         <!-- left column-->
          <div class="recipe__intro-left">
         
+        {% if recipe.photo %}
         <figure class="recipe__photo" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
-          <img src="/recipe/{{ recipe.id }}/photo" alt="Photo of {{ recipe.title }}" width="600" height="600" />
-          <meta itemprop="url" content="/recipe/{{ recipe.id }}/photo" />
+          <img src="{% url 'recipe_photo' recipe.id %}" alt="Photo of {{ recipe.title }}" width="600" height="600" />
+          <meta itemprop="url" content="{% url 'recipe_photo' recipe.id %}" />
         </figure>
+        {% endif %}
         
         
  <dl class="recipe__meta">

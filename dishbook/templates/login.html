@@ -4,12 +4,16 @@
   <main id="main" class="main" tabindex="-1">
     <div class="login-box">
       <h2>Sign in to Dishbook</h2>
+      {% if error %}
+      <p class="form-error" role="alert">{{ error }}</p>
+      {% endif %}
 
       <form action="/login/" method="post" aria-describedby="login-help">
         {% csrf_token %}
         <div>
           <label for="username">Username:</label>
           <input id="username" name="username" type="text" autocomplete="username" required />
+          <input type="hidden" name="next" value="{{ next }}" />
         </div>
 
         <div>

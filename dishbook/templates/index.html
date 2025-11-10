@@ -14,7 +14,7 @@
         with photos, tags, and clear steps. Build a cookbook that
         grows with you, one small improvement at a time.</p>
         <p class="actions">
-          <a class="btn btn-primary" href="/login/">Sign in</a>
+          <a class="btn btn-primary" href="{% url 'signin' %}?next={{ request.get_full_path|urlencode }}">Sign in</a>
           <a class="btn" href="/s">Browse recipes</a>
         </p>
       </div>

@@ -1,51 +1,92 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
-from django.db.models import Max
-from . import models
+from django.db.models import Max, Q
+from django.core.exceptions import PermissionDenied
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.http import FileResponse, Http404
+from . import models
+
+MAX_UPLOAD_SIZE = 64 * 1024 * 1024  # 64 MiB
+PNG_MAGIC = b"\x89PNG"
 
 
 # Create your views here.
+def _visible_recipe_filter(request):
+    visible_filter = Q(is_public=True)
+    if request.user.is_authenticated:
+        visible_filter |= Q(author=request.user)
+    return visible_filter
+
+
 def index(request):
-    featured_recipes = models.Recipe.objects.all().order_by('-id')[:3]
+    visible_filter = _visible_recipe_filter(request)
+    featured_recipes = (
+        models.Recipe.objects.filter(visible_filter)
+        .order_by('-id')
+        .distinct()[:3]
+    )
     return render(request, "index.html", {"recipes": featured_recipes})
+
 
 def recipe(request, recipe_id):
     recipe = get_object_or_404(models.Recipe, id=recipe_id)
+    if not recipe.is_public and (not request.user.is_authenticated or recipe.author != request.user):
+        raise PermissionDenied
     copies_count = recipe.copies.count()
     aggregated_ingredients = recipe.aggregated_ingredients()
     return render(request, "recipe.html", {
-        "recipe": recipe, 
+        "recipe": recipe,
         "copies_count": copies_count,
         "aggregated_ingredients": aggregated_ingredients
     })
 
+
 def search(request):
-    all_recipes = models.Recipe.objects.all()
+    visible_filter = _visible_recipe_filter(request)
+    all_recipes = models.Recipe.objects.filter(visible_filter).distinct()
     return render(request, "search.html", {"recipes": all_recipes})
+
 
 def profile(request, username):
     author = get_object_or_404(User, username=username)
-    user_recipes = models.Recipe.objects.filter(author=author)
+    if request.user.is_authenticated and request.user == author:
+        user_recipes = models.Recipe.objects.filter(author=author)
+    else:
+        user_recipes = models.Recipe.objects.filter(author=author, is_public=True)
     return render(request, "profile.html", {"author": author, "recipes": user_recipes})
 
 def signin(request):
     if request.method == "POST":
         username = (request.POST.get("username") or "").strip()
         password = request.POST.get("password") or ""
+        next_url = request.POST.get("next", "/")
+
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect(f"/profile/{user.username}")
-    return render(request, "login.html")
+            if next_url.startswith("/") and not next_url.startswith("//"):
+                return redirect(next_url)
+            return redirect("/")
+        else:
+            return render(request, "login.html", {
+                "error": "Invalid username or password.",
+                "next": next_url,
+            })
+    else:
+        next_param = request.GET.get("next", "/")
+        return render(request, "login.html", {"next": next_param})
 
 
 def signout(request):
     logout(request)
     return redirect("/login/")
 
+@login_required
 def edit_recipe(request, recipe_id):
     recipe = get_object_or_404(models.Recipe, id=recipe_id)
+    if recipe.author != request.user:
+        raise PermissionDenied
     if request.method == "GET":
         aggregated_ingredients = recipe.aggregated_ingredients()
         return render(request, "edit.html", {
@@ -54,6 +95,7 @@ def edit_recipe(request, recipe_id):
         })
     elif request.method == "POST":
         errors_list = []
+        photo_file = request.FILES.get("recipe_photo")
         
         # Get form data
         title = request.POST.get("title", "")
@@ -260,7 +302,7 @@ def edit_recipe(request, recipe_id):
                     except ValueError:
                         pass  # Error already added above
         
-        # Update recipe object with form data (even if invalid)
+        # Update recipe object with form data even if invalid
         recipe.title = title
         recipe.description = description
         
@@ -296,6 +338,11 @@ def edit_recipe(request, recipe_id):
                 ingredient.unit = request.POST.get(f'ingredient_unit_{ingredient.id}', "")
                 ingredient.name = request.POST.get(f'ingredient_name_{ingredient.id}', "")
         
+        if photo_file:
+            is_png, error_message = _is_small_png(photo_file, label="Recipe photo")
+            if not is_png:
+                errors_list.append(error_message or "Recipe photo must be a valid PNG image.")
+
         # If there are errors, re-render the page with errors
         if errors_list:
             aggregated_ingredients = recipe.aggregated_ingredients()
@@ -306,18 +353,109 @@ def edit_recipe(request, recipe_id):
             })
         else:
             # No errors, save and redirect
+            if photo_file:
+                if hasattr(photo_file, "seek"):
+                    photo_file.seek(0)
+                recipe.photo.save(photo_file.name, photo_file, save=False)
             recipe.save()
             
-            # Save steps and their ingredients (use the updated steps_list)
+            # Save steps and their ingredients
             for step in steps_list:
                 step.save()
                 for ingredient in step.ingredients.all():
                     ingredient.save()
             
-            # Save new objects (extra step and ingredients)
+        
             for obj in new_objects:
                 obj.save()
             
             return redirect(f"/recipe/{recipe_id}")
 
 
+@login_required
+def make_public(request, recipe_id):
+    recipe = get_object_or_404(models.Recipe, id=recipe_id)
+    if request.method != "POST":
+        raise PermissionDenied
+    if recipe.author != request.user:
+        raise PermissionDenied
+    recipe.is_public = True
+    recipe.save(update_fields=["is_public"])
+    return redirect("recipe", recipe_id=recipe.id)
+
+def _read_first_chunk(file_obj):
+    try:
+        if hasattr(file_obj, "chunks"):
+            iterator = file_obj.chunks()
+            chunk = next(iterator)
+        elif hasattr(file_obj, "read"):
+            position = None
+            if hasattr(file_obj, "tell"):
+                try:
+                    position = file_obj.tell()
+                except (OSError, ValueError):
+                    position = None
+            chunk = file_obj.read(len(PNG_MAGIC))
+            if position is not None and hasattr(file_obj, "seek"):
+                file_obj.seek(position)
+        else:
+            chunk = None
+    except StopIteration:
+        chunk = None
+    except Exception:
+        chunk = None
+    finally:
+        if hasattr(file_obj, "seek"):
+            try:
+                file_obj.seek(0)
+            except Exception:
+                pass
+    return chunk
+
+
+def _is_small_png(file_obj, label="Photo"):
+    size = getattr(file_obj, "size", None)
+    if size is None:
+        file_attr = getattr(file_obj, "file", None)
+        size = getattr(file_attr, "size", None)
+    if size is not None and size > MAX_UPLOAD_SIZE:
+        return False, f"{label} must be 64 MiB or smaller."
+
+    name = getattr(file_obj, "name", "")
+    if name and not name.lower().endswith(".png"):
+        return False, f"{label} must be a PNG image."
+
+    first_chunk = _read_first_chunk(file_obj)
+    if not first_chunk:
+        return False, f"Could not read {label.lower()}."
+
+    if len(first_chunk) < len(PNG_MAGIC) or first_chunk[:len(PNG_MAGIC)] != PNG_MAGIC:
+        return False, f"{label} is not a valid PNG file."
+
+    return True, None
+
+def recipe_image(request, recipe_id):
+    recipe = get_object_or_404(models.Recipe, id=recipe_id)
+
+    if not recipe.is_public and (not request.user.is_authenticated or recipe.author != request.user):
+        raise PermissionDenied
+
+    if not recipe.photo:
+        raise Http404("Photo not found")
+
+    is_valid, _ = _is_small_png(recipe.photo, label="Recipe photo")
+    if not is_valid:
+        raise Http404("Photo not found")
+
+    return FileResponse(recipe.photo.open("rb"), content_type="image/png")
+
+
+def profile_image(request, username):
+    user = get_object_or_404(User, username=username)
+    profile = getattr(user, "profile", None)
+    if profile is None or not profile.photo:
+        raise Http404("Profile photo not found")
+    is_valid, _ = _is_small_png(profile.photo, label="Profile photo")
+    if not is_valid:
+        raise Http404("Photo not found")
+    return FileResponse(profile.photo.open("rb"), content_type="image/png")

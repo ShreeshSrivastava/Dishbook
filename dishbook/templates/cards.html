@@ -5,7 +5,7 @@
         <a class="card__link" href="/recipe/{{ recipe.id }}">
           <figure class="card__media">
             {% if recipe.photo %}
-              <img src="/recipe/{{ recipe.id }}/photo" alt="Photo of {{ recipe.title }}" width="640" height="640" loading="lazy" />
+              <img src="{% url 'recipe_photo' recipe.id %}" alt="Photo of {{ recipe.title }}" width="640" height="640" loading="lazy" />
             {% endif %}
           </figure>
           <div class="card__body">

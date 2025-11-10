@@ -20,20 +20,18 @@
   <h2 class="brand"><a href="/">Dishbook</a></h2>
 
   <div class="user-strip">
+    {% if user.is_authenticated %}
     <span class="profile-name">
       {% if user.get_full_name %}
         {{ user.get_full_name }}
-      {% elif user.is_authenticated %}
-        {{ user.username }}
       {% else %}
-        {{ user }}
+        {{ user.username }}
       {% endif %}
     </span>
-    {% if user.is_authenticated %}
       <a class="view-profile-link" href="/profile/{{ user.username }}">View Profile</a>
       <a class="signout-link" href="/logout/">Sign out</a>
     {% else %}
-      <a class="view-profile-link" href="/login/">Sign in</a>
+      <a class="view-profile-link" href="{% url 'signin' %}?next={{ request.get_full_path|urlencode }}">Sign in</a>
     {% endif %}
   </div>
 </div>
@@ -46,7 +44,7 @@
           {% if user.is_authenticated %}
           <li><a href="/profile/{{ user.username }}">My Cookbook</a></li>
           {% else %}
-          <li><a href="/login/">My Cookbook</a></li>
+          <li><a href="{% url 'signin' %}?next={{ request.get_full_path|urlencode }}">My Cookbook</a></li>
           {% endif %}
         </ul>
         <form class="site-nav__search" role="search" action="/s" method="get">

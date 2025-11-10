@@ -4,7 +4,7 @@
   <!-- Main Content: Recipe Page -->
   <main id="main" class="main" tabindex="-1">
 
-    <form action="/recipe/{{ recipe.id }}/edit/" method="post">
+    <form action="/recipe/{{ recipe.id }}/edit/" method="post" enctype="multipart/form-data">
         {% csrf_token %}
        <div class="recipe-box">
     <article class="recipe" itemscope itemtype="https://schema.org/Recipe">
@@ -62,10 +62,16 @@
         <!-- left column-->
          <div class="recipe__intro-left">
       
+        {% if recipe.photo %}
         <figure class="recipe__photo" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
-          <img src="/recipe/{{ recipe.id }}/photo" alt="Photo of {{ recipe.title }}" width="600" height="600" />
-          <meta itemprop="url" content="/recipe/{{ recipe.id }}/photo" />
+          <img src="{% url 'recipe_photo' recipe.id %}" alt="Photo of {{ recipe.title }}" width="600" height="600" />
+          <meta itemprop="url" content="{% url 'recipe_photo' recipe.id %}" />
         </figure>
+        {% endif %}
+        <div class="form-field">
+          <label for="recipe_photo">Recipe photo</label>
+          <input id="recipe_photo" type="file" name="recipe_photo" accept="image/png">
+        </div>
         
         
  <dl class="recipe__meta">

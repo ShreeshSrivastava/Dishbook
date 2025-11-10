@@ -14,6 +14,7 @@ class Recipe(models.Model):
     copied_from = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name="copies")
     featured_on = models.DateField(null=True, blank=True)
     tags = models.ManyToManyField('Tag', blank=True)
+    is_public = models.BooleanField(default=False)
     
     def total_time(self):
         return self.prep_time_minutes + self.cook_time_minutes
