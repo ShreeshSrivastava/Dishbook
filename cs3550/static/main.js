@@ -1,0 +1,1 @@
+console.log("Hello", document.title);
