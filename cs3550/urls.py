@@ -30,5 +30,6 @@ urlpatterns = [
     path("recipe/<int:recipe_id>/makepublic", views.make_public, name="make_public"),
     path("logout/", views.signout, name="logout"),
     path("recipe/<int:recipe_id>/photo", views.recipe_image, name="recipe_photo"),
+    path("api/s", views.search_api, name="search_api"),
 ]
 

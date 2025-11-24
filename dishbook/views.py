@@ -4,7 +4,7 @@ from django.db.models import Max, Q
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.http import FileResponse, Http404
+from django.http import FileResponse, Http404, JsonResponse
 from . import models
 
 MAX_UPLOAD_SIZE = 64 * 1024 * 1024  # 64 MiB
@@ -42,10 +42,54 @@ def recipe(request, recipe_id):
     })
 
 
+def _perform_search(visible_filter, query):
+    """Helper function to perform search filtering. Returns queryset."""
+    recipes = models.Recipe.objects.filter(visible_filter)
+    
+    if query:
+        keywords = query.split()
+        for keyword in keywords:
+            if keyword.startswith("tag:"):
+                tag_name = keyword.removeprefix("tag:")
+                recipes = recipes.filter(tags__name=tag_name)
+            elif keyword.startswith("variation:"):
+                recipe_id_str = keyword.removeprefix("variation:")
+                try:
+                    recipe_id = int(recipe_id_str)
+                    recipes = recipes.filter(copied_from_id=recipe_id)
+                except ValueError:
+                    pass  # Invalid ID, skip this keyword
+            else:
+                # Regular keyword - search in title
+                recipes = recipes.filter(title__icontains=keyword)
+    
+    return recipes.distinct()
+
+
 def search(request):
+    query = request.GET.get("q", "").strip()
     visible_filter = _visible_recipe_filter(request)
-    all_recipes = models.Recipe.objects.filter(visible_filter).distinct()
-    return render(request, "search.html", {"recipes": all_recipes})
+    all_recipes = _perform_search(visible_filter, query)
+    return render(request, "search.html", {"recipes": all_recipes, "query": query})
+
+
+def search_api(request):
+    query = request.GET.get("q", "").strip()
+    visible_filter = _visible_recipe_filter(request)
+    recipes = _perform_search(visible_filter, query)
+    
+    results = []
+    for recipe in recipes:
+        result = {
+            "id": recipe.id,
+            "title": recipe.title,
+            "tags": [tag.name for tag in recipe.sorted_tags()]
+        }
+        if recipe.photo:
+            result["photo"] = f"/recipe/{recipe.id}/photo"
+        results.append(result)
+    
+    return JsonResponse({"results": results, "query": query})
 
 
 def profile(request, username):
@@ -89,9 +133,11 @@ def edit_recipe(request, recipe_id):
         raise PermissionDenied
     if request.method == "GET":
         aggregated_ingredients = recipe.aggregated_ingredients()
+        copies_count = recipe.copies.count()
         return render(request, "edit.html", {
             "recipe": recipe,
-            "aggregated_ingredients": aggregated_ingredients
+            "aggregated_ingredients": aggregated_ingredients,
+            "copies_count": copies_count
         })
     elif request.method == "POST":
         errors_list = []

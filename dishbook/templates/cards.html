@@ -12,7 +12,7 @@
             <h3 class="card__title">{{ recipe.title }}</h3>
             <ul class="tags">
               {% for tag in recipe.sorted_tags %}
-                <li><a href="/s">#{{ tag.name }}</a></li>
+                <li><a href="/s?q=tag:{{ tag.name }}">#{{ tag.name }}</a></li>
               {% endfor %}
             </ul>
           </div>

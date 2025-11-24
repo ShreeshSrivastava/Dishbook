@@ -37,7 +37,7 @@
 
     {% if copies_count > 0 %}
     <span class="recipe__variations">
-      <a href="/s">{{ copies_count }} variation{{ copies_count|pluralize }}</a>
+      <a href="/s?q=variation:{{ recipe.id }}">{{ copies_count }} variation{{ copies_count|pluralize }}</a>
     </span>
     {% endif %}
 
@@ -49,7 +49,7 @@
       <span class="tags-label">Tags:</span> 
       <ul class="recipe__tags" aria-label="Tags">
         {% for tag in recipe.sorted_tags %}
-        <li><a href="/s">#{{ tag.name }}</a></li>
+        <li><a href="/s?q=tag:{{ tag.name }}">#{{ tag.name }}</a></li>
         {% endfor %}
       </ul>
     </div>
