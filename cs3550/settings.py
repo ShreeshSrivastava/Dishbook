@@ -10,22 +10,63 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import importlib.util
+import os
 from pathlib import Path
+
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
+def env_bool(name, default):
+    value = os.environ.get(name)
+    if value is None:
+        return default
+    return value.strip().lower() in ("1", "true", "yes", "on")
+
+
+def env_list(name):
+    return [item.strip() for item in os.environ.get(name, "").split(",") if item.strip()]
+
+
+# Railway injects RAILWAY_ENVIRONMENT_ID into every deployment.
+ON_RAILWAY = "RAILWAY_ENVIRONMENT_ID" in os.environ
+
+# Persistent data (SQLite database and uploads). On Railway this must be a
+# volume, because the container filesystem is wiped on every deploy.
+DATA_DIR = Path(os.environ.get("DJANGO_DATA_DIR") or os.environ.get("RAILWAY_VOLUME_MOUNT_PATH") or BASE_DIR)
+
+# The course autotester only installs django and pillow, so production-only
+# packages from requirements.txt must stay optional.
+HAS_WHITENOISE = importlib.util.find_spec("whitenoise") is not None
+
+
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^aph50j+0rz%c9ew#weeau#g)rmw_+0x(jhayysl^3yv@v)jj6'
+DEBUG = env_bool("DJANGO_DEBUG", default=not ON_RAILWAY)
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+if not SECRET_KEY:
+    if not DEBUG:
+        raise ImproperlyConfigured("Set the DJANGO_SECRET_KEY environment variable.")
+    SECRET_KEY = 'django-insecure-^aph50j+0rz%c9ew#weeau#g)rmw_+0x(jhayysl^3yv@v)jj6'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env_list("DJANGO_ALLOWED_HOSTS")
+if os.environ.get("RAILWAY_PUBLIC_DOMAIN"):
+    ALLOWED_HOSTS.append(os.environ["RAILWAY_PUBLIC_DOMAIN"])
+
+CSRF_TRUSTED_ORIGINS = [f"https://{host.lstrip('.')}" for host in ALLOWED_HOSTS if host != "*"]
+
+if not DEBUG:
+    # Railway terminates TLS at its edge proxy and forwards plain HTTP.
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SECURE_SSL_REDIRECT = env_bool("DJANGO_SECURE_SSL_REDIRECT", default=True)
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = int(os.environ.get("DJANGO_HSTS_SECONDS", "3600"))
+    SECURE_REFERRER_POLICY = "same-origin"
 
 # Enable automatic slash appending so /login redirects to /login/
 APPEND_SLASH = True
@@ -52,6 +93,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+if HAS_WHITENOISE:
+    MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 
 ROOT_URLCONF = 'cs3550.urls'
 
@@ -76,12 +119,20 @@ WSGI_APPLICATION = 'cs3550.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# Uses DATABASE_URL (e.g. Railway Postgres) when set, otherwise SQLite in DATA_DIR.
+if os.environ.get("DATABASE_URL"):
+    import dj_database_url
+
+    DATABASES = {
+        'default': dj_database_url.config(conn_max_age=600, conn_health_checks=True),
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': DATA_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -121,15 +172,20 @@ LOGIN_URL = "/login/"
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [ BASE_DIR / 'cs3550' / 'static' ]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Uploaded media. There is deliberately no MEDIA_URL route: photos are only
 # served through the recipe_image / profile_image views, which enforce
 # visibility and re-validate the file. Keep MEDIA_ROOT outside any web root.
-MEDIA_ROOT = BASE_DIR / 'uploads'
+MEDIA_ROOT = DATA_DIR / 'uploads'
 
 STORAGES = {
     "default": {"BACKEND": "dishbook.storage.ContentAddressedStorage"},
-    "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage"
+        if HAS_WHITENOISE
+        else "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
 }
 
 FILE_UPLOAD_PERMISSIONS = 0o640

@@ -1,4 +1,5 @@
 uploads/*
+staticfiles/
 db.sqlite3
 *.pyc
 .DS_Store
