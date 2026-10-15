@@ -399,11 +399,14 @@ def edit_recipe(request, recipe_id):
             })
         else:
             # No errors, save and redirect
+            old_photo_name = recipe.photo.name
             if photo_file:
                 if hasattr(photo_file, "seek"):
                     photo_file.seek(0)
-                recipe.photo.save(photo_file.name, photo_file, save=False)
+                recipe.photo.save("upload.png", photo_file, save=False)
             recipe.save()
+            if recipe.photo.name != old_photo_name:
+                models.delete_photo_if_unused(old_photo_name)
             
             # Save steps and their ingredients
             for step in steps_list:

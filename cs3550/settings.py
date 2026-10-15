@@ -122,6 +122,19 @@ LOGIN_URL = "/login/"
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [ BASE_DIR / 'cs3550' / 'static' ]
 
+# Uploaded media. There is deliberately no MEDIA_URL route: photos are only
+# served through the recipe_image / profile_image views, which enforce
+# visibility and re-validate the file. Keep MEDIA_ROOT outside any web root.
+MEDIA_ROOT = BASE_DIR / 'uploads'
+
+STORAGES = {
+    "default": {"BACKEND": "dishbook.storage.ContentAddressedStorage"},
+    "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+}
+
+FILE_UPLOAD_PERMISSIONS = 0o640
+FILE_UPLOAD_DIRECTORY_PERMISSIONS = 0o750
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

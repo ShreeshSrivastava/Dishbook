@@ -1,11 +1,20 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.files.storage import default_storage
 
 # Create your models here.
 
+def delete_photo_if_unused(name):
+    """Photos are shared between rows with identical images, so only delete unreferenced ones."""
+    if not name:
+        return
+    if Recipe.objects.filter(photo=name).exists() or Profile.objects.filter(photo=name).exists():
+        return
+    default_storage.delete(name)
+
 class Recipe(models.Model):
     title = models.CharField(max_length=200)
-    photo = models.ImageField(upload_to="media/", null=True, blank=True)
+    photo = models.ImageField(upload_to="recipes/", null=True, blank=True)
     description = models.TextField()
     prep_time_minutes = models.IntegerField()
     cook_time_minutes = models.IntegerField()
@@ -89,5 +98,5 @@ class Tag(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    photo = models.ImageField(upload_to="media/", null=True, blank=True)
+    photo = models.ImageField(upload_to="profiles/", null=True, blank=True)
     bio = models.TextField(null=True, blank=True)
